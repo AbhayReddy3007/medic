@@ -1,0 +1,48 @@
+{
+  "tolerability_score": "1/5",
+  "score_numeric": 1,
+  "supporting_data": {
+    "discontinuation_rate_drug": "nan%",
+    "discontinuation_rate_soc": "16.6% (semaglutide)",
+    "soc_source": "SELECT trial (Lincoff et al., published February 13, 2025; NCT03574597)",
+    "difference": "nan%"
+  },
+  "side_effect_summary": {
+    "key_aes": "Not reported",
+    "frequency": "Not reported",
+    "severity": "Unknown"
+  },
+  "comparison": {
+    "vs_placebo": "Worse (Drug nan% vs Placebo nan%)",
+    "vs_soc": "Similar to SoC (Drug nan% vs semaglutide 16.6%)"
+  },
+  "guardrail": "PASS",
+  "guardrail_reason": null,
+  "justification": "the data sources are\nThe tolerability analysis for Bofanglutide is derived from a comprehensive set of 45 clinical trials. Key data sources include NCT06670209, NCT07055386, and NCT07292441 (specifically the GZR18-BWM-303 study). Additionally, data from the GRADUAL-1 (CTRI/2026/02/103002) and GRADUAL-2 (CTRI/2026/02/103003) trials were utilized to provide a broad perspective on the drug's performance across different populations.\n\nthe discontinuation rates are\nIn the evaluated clinical trials, the discontinuation rate for the standard of care (SoC), semaglutide, was recorded at 16.6%. The specific discontinuation rates for the Bofanglutide drug arm and the placebo arm were not numerically specified in the provided data set (listed as nan%). While key adverse events were not individually reported in the source data, the patient burden level was explicitly categorized as mild and transient.\n\nthe calculations are\nThe scoring process followed a four-step methodology. In Step 1, a base score of 1 out of 5 was established. This score was determined based on the drug arm discontinuation rate falling into the \u2265 20% threshold category according to the provided scoring logic. Because specific drug and placebo percentages were not available for a weighted average, the base score reflects the predefined penalty for the reported tolerability tier.\n\nthe adjustments are\nTwo specific adjustments were evaluated to refine the base score. The first adjustment concerned the comparison to the standard of care; since Bofanglutide demonstrated a tolerability profile similar to semaglutide (which has a 16.6% discontinuation rate), a +0 adjustment was applied. The second adjustment focused on patient burden. Although the side effects were described as mild and transient, this status resulted in a +0 adjustment as it meets the expected tolerability standard without providing an additional safety advantage that would warrant a score increase.\n\nthe final reasoning is\nBofanglutide successfully passed the internal guardrail check, confirming it meets the minimum tolerability threshold for clinical consideration. The final assessment is characterized by a score of 1. This reflects a baseline discontinuation profile that is similar to current standards of care like semaglutide. While the adverse events are manageable and transient in nature, the lack of a significant reduction in discontinuation rates compared to the 16.6% benchmark of the SoC results in a final tolerability score of 1.",
+  "_scoring_breakdown": {
+    "base_score": 1,
+    "base_reason": "Drug (nan%) \u2265 20%",
+    "soc_adjustment": 0,
+    "burden_adjustment": 0,
+    "trials_used": 45,
+    "total_trials_extracted": 45
+  },
+  "molecule": "Bofanglutide",
+  "_generated_rationale": "Bofanglutide\u2019s low score reflects discontinuation rates estimated at or above 20%, aligning with established standards like semaglutide. While adverse events are reported as mild and transient, the absence of specific, numerical discontinuation data for the drug arm introduces uncertainty regarding its definitive tolerability profile compared to current therapies.",
+  "rationale": "Bofanglutide\u2019s low score reflects discontinuation rates estimated at or above 20%, aligning with established standards like semaglutide. While adverse events are reported as mild and transient, the absence of specific, numerical discontinuation data for the drug arm introduces uncertainty regarding its definitive tolerability profile compared to current therapies.",
+  "rationale_prompt_payload": {
+    "molecule": "Bofanglutide",
+    "tolerability_score": 1,
+    "discontinuation_rate": null,
+    "key_adverse_events": [],
+    "ae_severity": null,
+    "guardrail": "PASS",
+    "num_trials": 45,
+    "justification": "the data sources are\nThe tolerability analysis for Bofanglutide is derived from a comprehensive set of 45 clinical trials. Key data sources include NCT06670209, NCT07055386, and NCT07292441 (specifically the GZR18-BWM-303 study). Additionally, data from the GRADUAL-1 (CTRI/2026/02/103002) and GRADUAL-2 (CTRI/2026/02/103003) trials were utilized to provide a broad perspective on the drug's performance across different populations.\n\nthe discontinuation rates are\nIn the evaluated clinical trials, the discontinuation rate for the standard of care (SoC), semaglutide, was recorded at 16.6%. The specific discontinuation rates for the Bofanglutide drug arm and the placebo arm were not numerically specified in the provided data set (listed as nan%). While key adverse events were not individually reported in the source data, the patient burden level was explicitly categorized as mild and transient.\n\nthe calculations are\nThe scoring process followed a four-step methodology. In Step 1, a base score of 1 out of 5 was established. This score was determined based on the drug arm discontinuation rate falling into the \u2265 20% threshold category according to the provided scoring logic. Because specific drug and placebo percentages were not available for a weighted average, the base score reflects the predefined penalty for the reported tolerability tier.\n\nthe adjustments are\nTwo specific adjustments were evaluated to refine the base score. The first adjustment concerned the comparison to the standard of care; since Bofanglutide demonstrated a tolerability profile similar to semaglutide (which has a 16.6% discontinuation rate), a +0 adjustment was applied. The second adjustment focused on patient burden. Although the side effects were described as mild and transient, this status resulted in a +0 adjustment as it meets the expected tolerability standard without providing an additional safety advantage that would warrant a score increase.\n\nthe final reasoning is\nBofanglutide successfully passed the internal guardrail check, confirming it meets the minimum tolerability threshold for clinical consideration. The final assessment is characterized by a score of 1. This reflects a baseline discontinuation profile that is similar to current standards of care like semaglutide. While the adverse events are manageable and transient in nature, the lack of a significant reduction in discontinuation rates compared to the 16.6% benchmark of the SoC results in a final tolerability score of 1."
+  },
+  "report_metadata": {
+    "report_generated": true,
+    "base_report_gcs_uri": "gs://cognito-gcs/Cognito_new/reports_test_phase/Bofanglutide/Medical Potential/Tolerability & Patient Burden.pdf",
+    "archive_report_gcs_uri": "gs://cognito-gcs/Cognito_new/reports_test_phase/Bofanglutide/Medical Potential/archived/Tolerability & Patient Burden_20260812_205711.pdf"
+  }
+}

@@ -1,0 +1,64 @@
+"""
+
+{input_json}
+
+You are a pharmaceutical patent and competitive intelligence analyst.
+
+Your task is to generate a SINGLE narrative summary for a molecule using information extracted from the attached PDF documents and the provided JSON input.
+
+OBJECTIVE
+Create a concise, executive-ready product narrative that summarizes the molecule's patent and market position.
+
+OUTPUT REQUIREMENTS
+- Output exactly ONE paragraph.
+- Maximum 100 words (hard cap).
+- Write as a natural product narrative, not as bullets or a structured report.
+- Do NOT mention Cognito dimensions, pillar names, scores, frameworks, or source categories.
+- Use factual information only from the supplied documents and JSON.
+- Do not invent or assume facts.
+- If multiple sources provide similar information, consolidate them.
+
+MANDATORY CONTENT TO INCLUDE
+1. Molecule name.
+2. Dosage form(s).
+3. Dosage strength(s).
+4. Mention it as Pre-registerd or marketed based on input data provided
+5. Loss of Exclusivity timing from the pdf report `Primary Market Entry Horizon.pdf`
+8. Best opportunity for competitors (e.g., geographic gaps, design-around potential, circumvention potential). from `Global Launch Sequencing & Arbitrage.pdf`
+9. Entry difficulty or exclusivity outlook from `Patent Strength and Invalidity Opportunity.pdf`
+11. Primary risk or barrier to entry.
+12. Overall outlook verdict.
+
+SPECIAL GUIDANCE
+
+For CLINICAL assets:
+- Describe the patent estate and entry horizon.
+- Highlight design-around and geographic opportunities.
+- State the primary patent barrier.
+- End with a concise overall outlook.
+
+For COMMERCIAL assets:
+- Describe marketed status and indications.
+- Include LOE/exclusivity timing when available.
+- Highlight the best challenger pathway.
+- State the primary patent barrier.
+- End with a concise overall outlook.
+
+WRITING STYLE
+- Professional, executive, and analytical.
+- Dense with information but easy to read.
+- Use one flowing paragraph.
+- Avoid marketing language and unsupported conclusions.
+- Prefer wording such as:
+  "protected by a layered patent estate..."
+  "entry remains constrained by..."
+  "value may arise from..."
+  "the primary barrier is..."
+  "overall outlook: Strong/Moderate/Weak/Challenging."
+
+INPUTS
+1. Attached PDF documents = supporting evidence.
+2. JSON = structured metadata and assessment outputs.
+
+OUTPUT
+Return only the final paragraph and nothing else."""

@@ -1,0 +1,23 @@
+{
+  "metadata": {
+    "project_name": "cognito-prod-394707",
+    "dataset_name": "cognito_prod_datamart",
+    "table_name": "clinical_trial_evidence_to_unmet_need_mapping"
+  },
+  "columns": [
+    { "name": "trial_id", "type": "STRING" },
+    { "name": "molecule_name", "type": "STRING" },
+    { "name": "unmet_need", "type": "STRING" },
+    { "name": "category", "type": "STRING" },
+    { "name": "country", "type": "STRING" },
+    { "name": "addresses_unmet_need", "type": "STRING" },
+    { "name": "evidence_strength", "type": "STRING" },
+    { "name": "relevant_endpoint", "type": "STRING" },
+    { "name": "explanation", "type": "STRING" },
+    { "name": "search_sources_used", "type": "STRING" },
+    { "name": "phase", "type": "STRING" },
+    { "name": "phase_status", "type": "STRING" },
+    { "name": "trial_size", "type": "FLOAT" },
+    { "name": "trial_location", "type": "STRING" }
+  ]
+}

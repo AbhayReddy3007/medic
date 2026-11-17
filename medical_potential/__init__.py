@@ -1,0 +1,3 @@
+from medical_potential.run_medical_potential_dimensions import run_medical_potential_dimensions
+
+__all__ = ["run_medical_potential_dimensions"]

@@ -1,0 +1,55 @@
+{
+  "tolerability_score": "1/5",
+  "score_numeric": 1,
+  "supporting_data": {
+    "discontinuation_rate_drug": "nan%",
+    "discontinuation_rate_soc": "6.1% (dulaglutide)",
+    "soc_source": "Trulicity (dulaglutide) EMA/FDA Product Label / AWARD clinical program",
+    "difference": "nan%"
+  },
+  "side_effect_summary": {
+    "key_aes": "Constipation, Decreased appetite, Diarrhea, Dyspepsia, Nausea",
+    "frequency": "Nausea 45%, Diarrhea 31%, Vomiting 18%, Constipation 16%, Decreased appetite 14%",
+    "severity": "Moderate"
+  },
+  "comparison": {
+    "vs_placebo": "Worse (Drug nan% vs Placebo nan%)",
+    "vs_soc": "Similar to SoC (Drug nan% vs dulaglutide 6.1%)"
+  },
+  "guardrail": "PASS",
+  "guardrail_reason": null,
+  "justification": "the data sources are derived from a comprehensive review of 90 clinical trials, with primary evidence extracted from the TRIUMPH-1 study (EUCTR2023-503657-35-00, EUCTR2023-503657-35, and NCT05548231), the TRIUMPH-2 study (EUCTR2023-503658-11), and the SUMMIT trial (NCT04847557). These sources provide the foundational safety and tolerability metrics for Retatrutide across diverse patient populations.\n\nthe discontinuation rates are influenced by a significant gastrointestinal side effect profile. While specific percentage differences for the drug and placebo arms were not numerically finalized in the aggregate data (reported as nan%), the standard of care (dulaglutide) demonstrated a discontinuation rate of 6.1%. The tolerability is primarily defined by key adverse events, including Nausea (45%), Diarrhea (28% to 31%), Vomiting (10% to 18%), Constipation (15% to 16%), and Decreased appetite (12% to 14%). These events are categorized as moderate in severity and transient in nature, though they represent a high frequency of occurrence among treated subjects.\n\nthe calculations are structured through a multi-step scoring framework to determine the final tolerability index. The base score was set at 1 out of 5, as the data indicates a drug discontinuation or adverse event impact rate of $\\ge$ 20%. This low base score reflects the high incidence of nausea and diarrhea observed across the TRIUMPH and SUMMIT programs. The calculation follows a logic of starting at this baseline and then applying adjustments for comparative performance and the qualitative nature of the patient experience.\n\nthe adjustments are applied based on the clinical context of the treatment. A Standard of Care (SoC) adjustment of +0 was assigned because Retatrutide\u2019s tolerability profile is considered similar to that of dulaglutide, a standard incretin therapy. However, a burden adjustment of -1 was applied to the score. This negative adjustment is due to the patient burden level being classified as \"persistent moderate,\" indicating that the frequency and intensity of gastrointestinal symptoms, while not life-threatening, impose a continuous challenge to patient adherence and quality of life during the titration and maintenance phases.\n\nthe final reasoning is that Retatrutide exhibits a tolerability profile characterized by high-frequency but manageable gastrointestinal distress. The final score is 1, calculated by taking the base score of 1, adding 0 for the SoC comparison, and subtracting 1 for the persistent moderate patient burden. Despite this low score, Retatrutide passes the guardrail check for the tolerability threshold, as the moderate and transient nature of its side effects is typical for the triple hormone receptor agonist class and does not preclude clinical utility.",
+  "_scoring_breakdown": {
+    "base_score": 1,
+    "base_reason": "Drug (nan%) \u2265 20%",
+    "soc_adjustment": 0,
+    "burden_adjustment": -1,
+    "trials_used": 90,
+    "total_trials_extracted": 90
+  },
+  "molecule": "Retatrutide",
+  "_generated_rationale": "Retatrutide\u2019s score is driven by frequent gastrointestinal side effects and a persistent moderate patient burden that challenges adherence. While its profile is comparable to standard therapies, the lack of finalized discontinuation data introduces uncertainty regarding its long-term tolerability and impact on patient quality of life.",
+  "rationale": "Retatrutide\u2019s score is driven by frequent gastrointestinal side effects and a persistent moderate patient burden that challenges adherence. While its profile is comparable to standard therapies, the lack of finalized discontinuation data introduces uncertainty regarding its long-term tolerability and impact on patient quality of life.",
+  "rationale_prompt_payload": {
+    "molecule": "Retatrutide",
+    "tolerability_score": 1,
+    "discontinuation_rate": {
+      "discontinuation_rate_drug": "nan%",
+      "discontinuation_rate_soc": "6.1% (dulaglutide)",
+      "soc_source": "Trulicity (dulaglutide) EMA/FDA Product Label / AWARD clinical program",
+      "difference": "nan%"
+    },
+    "side_effect_summary": {
+      "key_aes": "Constipation, Decreased appetite, Diarrhea, Dyspepsia, Nausea",
+      "frequency": "Nausea 45%, Diarrhea 31%, Vomiting 18%, Constipation 16%, Decreased appetite 14%",
+      "severity": "Moderate"
+    },
+    "num_trials": 90,
+    "justification": "the data sources are derived from a comprehensive review of 90 clinical trials, with primary evidence extracted from the TRIUMPH-1 study (EUCTR2023-503657-35-00, EUCTR2023-503657-35, and NCT05548231), the TRIUMPH-2 study (EUCTR2023-503658-11), and the SUMMIT trial (NCT04847557). These sources provide the foundational safety and tolerability metrics for Retatrutide across diverse patient populations.\n\nthe discontinuation rates are influenced by a significant gastrointestinal side effect profile. While specific percentage differences for the drug and placebo arms were not numerically finalized in the aggregate data (reported as nan%), the standard of care (dulaglutide) demonstrated a discontinuation rate of 6.1%. The tolerability is primarily defined by key adverse events, including Nausea (45%), Diarrhea (28% to 31%), Vomiting (10% to 18%), Constipation (15% to 16%), and Decreased appetite (12% to 14%). These events are categorized as moderate in severity and transient in nature, though they represent a high frequency of occurrence among treated subjects.\n\nthe calculations are structured through a multi-step scoring framework to determine the final tolerability index. The base score was set at 1 out of 5, as the data indicates a drug discontinuation or adverse event impact rate of $\\ge$ 20%. This low base score reflects the high incidence of nausea and diarrhea observed across the TRIUMPH and SUMMIT programs. The calculation follows a logic of starting at this baseline and then applying adjustments for comparative performance and the qualitative nature of the patient experience.\n\nthe adjustments are applied based on the clinical context of the treatment. A Standard of Care (SoC) adjustment of +0 was assigned because Retatrutide\u2019s tolerability profile is considered similar to that of dulaglutide, a standard incretin therapy. However, a burden adjustment of -1 was applied to the score. This negative adjustment is due to the patient burden level being classified as \"persistent moderate,\" indicating that the frequency and intensity of gastrointestinal symptoms, while not life-threatening, impose a continuous challenge to patient adherence and quality of life during the titration and maintenance phases.\n\nthe final reasoning is that Retatrutide exhibits a tolerability profile characterized by high-frequency but manageable gastrointestinal distress. The final score is 1, calculated by taking the base score of 1, adding 0 for the SoC comparison, and subtracting 1 for the persistent moderate patient burden. Despite this low score, Retatrutide passes the guardrail check for the tolerability threshold, as the moderate and transient nature of its side effects is typical for the triple hormone receptor agonist class and does not preclude clinical utility."
+  },
+  "report_metadata": {
+    "report_generated": true,
+    "base_report_gcs_uri": "gs://cognito-gcs/Cognito_new/reports_test_phase/Retatrutide/Medical Potential/Tolerability & Patient Burden.pdf",
+    "archive_report_gcs_uri": "gs://cognito-gcs/Cognito_new/reports_test_phase/Retatrutide/Medical Potential/archived/Tolerability & Patient Burden_20260813_171509.pdf"
+  }
+}

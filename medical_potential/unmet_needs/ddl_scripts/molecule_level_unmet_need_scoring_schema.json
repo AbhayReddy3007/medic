@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "project_name": "cognito-prod-394707",
+    "dataset_name": "cognito_prod_datamart",
+    "table_name": "molecule_level_unmet_needs_scoring"
+  },
+  "columns": [
+    { "name": "unmet_need", "type": "STRING" },
+    { "name": "category", "type": "STRING" },
+    { "name": "country", "type": "STRING" },
+    { "name": "score_dimension", "type": "STRING" },
+    { "name": "unmet_need_score", "type": "FLOAT" },
+    { "name": "evidence_impact_score", "type": "FLOAT" },
+    { "name": "unmet_need_score_rationale", "type": "STRING" },
+    { "name": "evidence_score_rationale", "type": "STRING" },
+    { "name": "confidence", "type": "STRING" },
+    { "name": "num_of_trials_assessed", "type": "INT" },
+    { "name": "evidence_impact_weight", "type": "FLOAT" },
+    { "name": "weighted_unmet_need_score", "type": "FLOAT" }
+  ]
+}

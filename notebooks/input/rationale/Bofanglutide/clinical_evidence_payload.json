@@ -1,0 +1,1105 @@
+{
+  "molecule_name": "Bofanglutide",
+  "brand_names": "",
+  "innovator": "Gan & Lee Pharmaceuticals",
+  "score_p": 5,
+  "score_d": 5,
+  "score_g": 5,
+  "score_e": 5,
+  "score_c": 0.25,
+  "final_score": 5.0,
+  "evidence_level": "STRONG",
+  "total_trials": 47,
+  "rct_count": 12,
+  "publications": 0,
+  "fda_approved": "No",
+  "evidence_gaps": "No peer-reviewed publications found; No FDA regulatory approval on record; Limited long-term safety data (no studies >= 2 years found)",
+  "consistency": "HbA1c: CONSISTENT; Weight: CONSISTENT",
+  "llm_consistency_report": "~12.8% of 47 studies consistent positive.\nSix out of 47 registered trials (12.77%) reported consistent positive",
+  "report_input_payload": {
+    "molecule": {
+      "generic_name": "Bofanglutide",
+      "brand_names": [],
+      "dev_codes": [
+        "PC-ECI-CM-101-2026",
+        "PC-ECI-CM-102-2026"
+      ],
+      "sponsor": "Carnot Laboratories",
+      "indications": [
+        "obesity & overweight",
+        "type 2 diabetes mellitus (t2dm)"
+      ],
+      "synonyms": [
+        "bofanglutide",
+        "pc-eci-cm-101-2026",
+        "pc-eci-cm-102-2026"
+      ],
+      "is_combination": false,
+      "components": []
+    },
+    "scoring": {
+      "P": 5,
+      "D": 5,
+      "G": 5,
+      "E": 5,
+      "C": 0.25,
+      "final": 5.0,
+      "reasoning": {
+        "P": "Highest completed phase is Phase 3, indicating late-stage clinical development.\nPhase distribution: Phase 1: 6; Phase 2: 13; Phase 3/4: 24.",
+        "D": "12 randomized controlled trial(s) found, the gold standard for clinical evidence.\nRCT design minimizes bias and provides the strongest causal inference.",
+        "G": "Trials conducted in Tier 1 regions (US/EU/UK): United States.\nThese geographies have the most rigorous regulatory oversight and data quality standards.",
+        "E": "[LLM-assessed] Bofanglutide demonstrates strong post-launch",
+        "C": "[LLM-assessed] ~12.8% of 47 studies consistent positive.\nSix out of 47 registered trials (12.77%) reported consistent positive"
+      },
+      "consistency_llm_detail": {
+        "summary": "Six out of 47 registered trials (12.77%) reported consistent positive",
+        "score": 0.25,
+        "pct": 12.77
+      }
+    },
+    "evidence_gaps": [
+      "No peer-reviewed publications found",
+      "No FDA regulatory approval on record",
+      "Limited long-term safety data (no studies >= 2 years found)"
+    ],
+    "evidence_consolidation": {
+      "total_studies": 47,
+      "studies_with_results": 6,
+      "results_published": false,
+      "peer_reviewed_count": 0,
+      "findings_consistency": "HbA1c: CONSISTENT; Weight: CONSISTENT",
+      "consistency_sources": [
+        "HbA1c consistent across trials: NCT06256523, NCT06256549, NCT06256549 (Phase 2b), NCT06974487 (GZR18-T2DM)",
+        "Weight consistent across trials: NCT06256523, CTRI/2026/02/103002 (GRADUAL-1), CTRI/2026/02/103003 (GRADUAL-2)"
+      ],
+      "replication": "Phase 2 (4 studies: NCT06256523, NCT06256549, NCT06256549 (Phase 2b), NCT06974487 (GZR18-T2DM)), Phase 3/4 (2 studies: CTRI/2026/02/103002 (GRADUAL-1), CTRI/2026/02/103003 (GRADUAL-2))",
+      "evidence_level": "STRONG",
+      "evidence_detail": "Multiple late-stage studies with published results"
+    },
+    "evidence_assessment": {
+      "evidence_level": "STRONG",
+      "evidence_detail": "Multiple late-stage studies with published results",
+      "total_trials": 47,
+      "trials_with_results": 6,
+      "total_publications": 0,
+      "total_patients": 2814,
+      "largest_trial": 900,
+      "rct_count": 12,
+      "has_regulatory_approval": false,
+      "phase_distribution": {
+        "Phase 1": 6,
+        "Phase 2": 13,
+        "Phase 3/4": 24,
+        "Other": 4
+      },
+      "design_distribution": {
+        "Randomized Controlled Trial (RCT)": 12,
+        "Unknown": 33,
+        "Single-arm Study": 2
+      }
+    },
+    "clinical_trials": [
+      {
+        "trial_id": "NCT06548997",
+        "phase": "1",
+        "trial_size": "32.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Randomized Controlled Trial (RCT)",
+        "comparators": [
+          {
+            "arm_label": "Placebo",
+            "arm_type": "PLACEBO_COMPARATOR",
+            "description": ""
+          }
+        ],
+        "title": "A Phase I Study to Evaluate the Safety, Tolerability, Pharmacokinetics, and Pharmacodynamics of GZR18 Injection in Healthy Subjects Following Single Dose and Once-weekly Dose for 2 Consecutive Weeks Until Reaching the Target Dose",
+        "status": "COMPLETED",
+        "trial_location": "China",
+        "trial_countries": [
+          "China"
+        ],
+        "duration": "2021-12-02 to 2022-10-20"
+      },
+      {
+        "trial_id": "NCT06974487",
+        "phase": "1",
+        "trial_size": "0.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Randomized Controlled Trial (RCT)",
+        "comparators": [
+          {
+            "arm_label": "GZR4 injection",
+            "arm_type": "ACTIVE_COMPARATOR",
+            "description": "Participants will get a single dose of GZR4 injection"
+          },
+          {
+            "arm_label": "GZR18 injection",
+            "arm_type": "ACTIVE_COMPARATOR",
+            "description": "Participants will get a single dose of GZR18 injection"
+          }
+        ],
+        "title": "A Randomized, Double-Blind, Crossover Phase I Clinical Study to Evaluate the Safety, Tolerability, PK and PD Profiles of a Single Dose of GZR102 Injection Versus GZR4 Injection and GZR18 Injection Given Separately in Chinese Adult Overweight Subjects",
+        "status": "NOT_YET_RECRUITING",
+        "trial_location": "China",
+        "trial_countries": [
+          "China"
+        ],
+        "duration": "2025-05-08 to 2025-09-30"
+      },
+      {
+        "trial_id": "NCT06974487 (N/A)",
+        "phase": "1",
+        "trial_size": "30",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT07141030",
+        "phase": "1",
+        "trial_size": "48.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Single-arm Study",
+        "comparators": [
+          {
+            "arm_label": "None identified",
+            "arm_type": "N/A",
+            "description": ""
+          }
+        ],
+        "title": "To Assess the Pharmacokinetic (PK) Differences of GZR18 Injection Between Subjects With Renal Impairment and Those With Normal Renal Function, Providing a Basis for Establishing a Clinical Dosing Regimen for Patients With Renal Impairment",
+        "status": "RECRUITING",
+        "trial_location": "China",
+        "trial_countries": [
+          "China"
+        ],
+        "duration": "2025-04-11 to 2025-10-09"
+      },
+      {
+        "trial_id": "NCT07355738",
+        "phase": "1",
+        "trial_size": "60.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Randomized Controlled Trial (RCT)",
+        "comparators": [
+          {
+            "arm_label": "None identified",
+            "arm_type": "N/A",
+            "description": ""
+          }
+        ],
+        "title": "A Randomized, Open-label, Single-dose, Parallel Comparison Study to Evaluate the Bioequivalence of GZR18 Injection Before and After CMC Change in Healthy Adult Male Subjects",
+        "status": "RECRUITING",
+        "trial_location": "China",
+        "trial_countries": [
+          "China"
+        ],
+        "duration": "2026-01-09 to 2026-05-20"
+      },
+      {
+        "trial_id": "NCT07355738 (N/A)",
+        "phase": "1",
+        "trial_size": "138",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT05328726",
+        "phase": "2",
+        "trial_size": "24.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Randomized Controlled Trial (RCT)",
+        "comparators": [
+          {
+            "arm_label": "Placebo control",
+            "arm_type": "PLACEBO_COMPARATOR",
+            "description": "Commercially obtained sterile, normal saline for injection will be used as the matching placebo. Placebo will be dosed in an identical manner to active study drug. The volume of placebo will be calculated according to body weight using active drug dose for volume calculation in order to maintain the study blind."
+          }
+        ],
+        "title": "A Double-blind, Randomized, Placebo-controlled, Sequential, Single, Ascending Dose Study to Evaluate the Safety, Tolerability, Pharmacokinetic, and Pharmacodynamic Parameters of Subcutaneous Injections of GZR18 in Healthy Subjects",
+        "status": "COMPLETED",
+        "trial_location": "United States",
+        "trial_countries": [
+          "United States"
+        ],
+        "duration": "2022-03-08 to 2023-02-09"
+      },
+      {
+        "trial_id": "NCT06256523",
+        "phase": "2",
+        "trial_size": "36.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": 1.81,
+        "weight_change_pct": 9.3,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": true,
+        "study_design": "Randomized Controlled Trial (RCT)",
+        "comparators": [
+          {
+            "arm_label": "Placebo",
+            "arm_type": "PLACEBO_COMPARATOR",
+            "description": "Placebo injection s.c."
+          }
+        ],
+        "title": "A Multicenter, Randomized, Double-blind, Placebo-controlled Phase Ib/IIa Clinical Study to Evaluate the Safety, Tolerability, Pharmacokinetics and Efficacy of GZR18 Injection in Chinese Adult Patients With Type 2 Diabetes Mellitus (T2DM)",
+        "status": "COMPLETED",
+        "trial_location": "China",
+        "trial_countries": [
+          "China"
+        ],
+        "duration": "2022-06-29 to 2023-09-28"
+      },
+      {
+        "trial_id": "NCT06256536",
+        "phase": "2",
+        "trial_size": "180.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Randomized Controlled Trial (RCT)",
+        "comparators": [
+          {
+            "arm_label": "Placebo",
+            "arm_type": "PLACEBO_COMPARATOR",
+            "description": "Placebo injection s.c."
+          }
+        ],
+        "title": "A Multicenter, Randomized, Double-blind, Placebo-controlled Phase Ib/IIa Clinical Study to Evaluate the Safety, Tolerability, Pharmacokinetics and Efficacy of GZR18 Injection in Chinese Obese/Overweight Patients",
+        "status": "COMPLETED",
+        "trial_location": "China",
+        "trial_countries": [
+          "China"
+        ],
+        "duration": "2022-07-14 to 2023-10-22"
+      },
+      {
+        "trial_id": "NCT06256549",
+        "phase": "2",
+        "trial_size": "272.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": 2.32,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": true,
+        "study_design": "Randomized Controlled Trial (RCT)",
+        "comparators": [
+          {
+            "arm_label": "Semaglutide",
+            "arm_type": "ACTIVE_COMPARATOR",
+            "description": "Semaglutide injection s.c."
+          }
+        ],
+        "title": "A Multicenter, Randomized, Controlled Phase II Clinical Trial to Evaluate the Efficacy and Safety of GZR18 Injection in Chinese Patients With Type 2 Diabetes Mellitus",
+        "status": "UNKNOWN",
+        "trial_location": "China",
+        "trial_countries": [
+          "China"
+        ],
+        "duration": "2023-08-09 to 2024-07-20"
+      },
+      {
+        "trial_id": "NCT06256549 (Phase 2b)",
+        "phase": "2",
+        "trial_size": "272.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": 2.32,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": true,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT06256562",
+        "phase": "2",
+        "trial_size": "180.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Randomized Controlled Trial (RCT)",
+        "comparators": [
+          {
+            "arm_label": "Placebo",
+            "arm_type": "PLACEBO_COMPARATOR",
+            "description": "Placebo injection s.c."
+          }
+        ],
+        "title": "A Multicenter, Randomized, Controlled Phase II Clinical Study to Evaluate the Efficacy and Safety of GZR18 Injection in Chinese Obese/Overweight Patients",
+        "status": "COMPLETED",
+        "trial_location": "China",
+        "trial_countries": [
+          "China"
+        ],
+        "duration": "2023-06-08 to 2024-06-05"
+      },
+      {
+        "trial_id": "NCT06737042",
+        "phase": "2",
+        "trial_size": "120.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Randomized Controlled Trial (RCT)",
+        "comparators": [
+          {
+            "arm_label": "Tirzepatide group",
+            "arm_type": "ACTIVE_COMPARATOR",
+            "description": "Tirzepatide group: 57 participants receiving 15 mg tirzepatide"
+          }
+        ],
+        "title": "EFFICACY AND SAFETY OF GZR18 INJECTED EVERY 2 WEEKS (Q2W) IN PARTICIPANTS WITHOUT TYPE 2 DIABETES, WHO HAVE OBESITY OR ARE OVERWEIGHT: A RANDOMIZED, TIRZEPATIDE- AND PLACEBO-CONTROLLED STUDY",
+        "status": "COMPLETED",
+        "trial_location": "United States",
+        "trial_countries": [
+          "United States"
+        ],
+        "duration": "2025-02-24 to 2026-02-27"
+      },
+      {
+        "trial_id": "NCT06737042 (GL-GLP-2001)",
+        "phase": "2",
+        "trial_size": "180.0",
+        "company_name": "HighTide Therapeutics",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT06737042 (N/A)",
+        "phase": "2",
+        "trial_size": "240.0",
+        "company_name": "Xuanzhu Biopharmaceutical",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT06777238 (N/A)",
+        "phase": "2",
+        "trial_size": "120.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT06778967 (N/A)",
+        "phase": "2",
+        "trial_size": "50.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT06974487 (GZR18-T2DM)",
+        "phase": "2",
+        "trial_size": "179.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": 2.1,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": true,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT07501832 (N/A)",
+        "phase": "2",
+        "trial_size": "180.0",
+        "company_name": "Xuanzhu Biopharmaceutical",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "CTRI/2026/02/103002 (GRADUAL-1)",
+        "phase": "3",
+        "trial_size": "630.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": 17.3,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": true,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "CTRI/2026/02/103003 (GRADUAL-2)",
+        "phase": "3",
+        "trial_size": "471.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": 17.3,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": true,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT06412497 (N/A)",
+        "phase": "3",
+        "trial_size": "900",
+        "company_name": "Jiangsu Hengrui Pharmaceuticals Co., Ltd.",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT06412510 (N/A)",
+        "phase": "3",
+        "trial_size": "500",
+        "company_name": "Jiangsu Hengrui Pharmaceuticals Co., Ltd.",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT06548945 (JY09-T2DM-03)",
+        "phase": "3",
+        "trial_size": "420.0",
+        "company_name": "Hangzhou Jiuyuan Gene Engineering",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT06548945 (N/A)",
+        "phase": "3",
+        "trial_size": "520",
+        "company_name": "Jiangsu Hengrui Pharmaceuticals Co., Ltd.",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT06548997 (JY09-T2DM-01)",
+        "phase": "3",
+        "trial_size": "420.0",
+        "company_name": "Hangzhou Jiuyuan Gene Engineering",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT06670209",
+        "phase": "3",
+        "trial_size": "40.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Single-arm Study",
+        "comparators": [
+          {
+            "arm_label": "None identified",
+            "arm_type": "N/A",
+            "description": ""
+          }
+        ],
+        "title": "A Phase I, Open-label, Fixed-sequence Study to Evaluate the Effect of Repeated Subcutaneous Injections of GZR18 Injection on the Pharmacokinetics of Oral Metformin Hydrochloride Tablets in Overweight/Obese Subjects",
+        "status": "NOT_YET_RECRUITING",
+        "trial_location": "Not specified",
+        "trial_countries": [],
+        "duration": "2024-10-30 to 2025-03-19"
+      },
+      {
+        "trial_id": "NCT06728124 (GRADUAL-1)",
+        "phase": "3",
+        "trial_size": "1000.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT06777238 (OPTIMUM-1)",
+        "phase": "3",
+        "trial_size": "450.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT06777238 (Optimum 1)",
+        "phase": "3",
+        "trial_size": "588.0",
+        "company_name": "Xuanzhu Biopharmaceutical",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT06778967 (OPTIMUM-2)",
+        "phase": "3",
+        "trial_size": "600.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT06974487 (JY09-Obesity-01)",
+        "phase": "3",
+        "trial_size": "600.0",
+        "company_name": "Hangzhou Jiuyuan Gene Engineering",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT07055386",
+        "phase": "3",
+        "trial_size": "1200.0",
+        "company_name": "HighTide Therapeutics",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Randomized Controlled Trial (RCT)",
+        "comparators": [
+          {
+            "arm_label": "None identified",
+            "arm_type": "N/A",
+            "description": ""
+          }
+        ],
+        "title": "A Phase II Clinical Study to Compare the Efficacy and Safety of Once-Weekly GZR102 Injection and Bi-weekly GZR18 Injection in Type 2 Diabetes Mellitus With Inadequate Glycemic Control on GLP-1 Receptor Agonists, With or Without Oral Antidiabetic Drugs",
+        "status": "ACTIVE_NOT_RECRUITING",
+        "trial_location": "China",
+        "trial_countries": [
+          "China"
+        ],
+        "duration": "2025-08-07 to 2026-06-28"
+      },
+      {
+        "trial_id": "NCT07141030 (JY09-T2DM-02)",
+        "phase": "3",
+        "trial_size": "450.0",
+        "company_name": "Hangzhou Jiuyuan Gene Engineering",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT07150975 (GRADUAL-2)",
+        "phase": "3",
+        "trial_size": "1000.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT07292441 (GZR18-BWM-303)",
+        "phase": "3",
+        "trial_size": "600.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT07292441 (N/A)",
+        "phase": "3",
+        "trial_size": "612.0",
+        "company_name": "Xuanzhu Biopharmaceutical",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT07355738 (JY09-Obesity-02)",
+        "phase": "3",
+        "trial_size": "600.0",
+        "company_name": "Hangzhou Jiuyuan Gene Engineering",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT07493057 (N/A)",
+        "phase": "3",
+        "trial_size": "48.0",
+        "company_name": "Xuanzhu Biopharmaceutical",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT07622810 (BALANCE-OBS)",
+        "phase": "3",
+        "trial_size": "1180.0",
+        "company_name": "Xuanzhu Biopharmaceutical",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT07628985 (BALANCE-DM2)",
+        "phase": "3",
+        "trial_size": "600.0",
+        "company_name": "Gan & Lee Pharmaceuticals",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT05024032 (N/A)",
+        "phase": "N/A",
+        "trial_size": "",
+        "company_name": "N/A",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT05328726 (N/A)",
+        "phase": "N/A",
+        "trial_size": "",
+        "company_name": "N/A",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT05432609 (N/A)",
+        "phase": "N/A",
+        "trial_size": "",
+        "company_name": "N/A",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT05677568 (N/A)",
+        "phase": "N/A",
+        "trial_size": "",
+        "company_name": "N/A",
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "BigQuery",
+        "results_available": false,
+        "study_design": "Unknown",
+        "comparators": [],
+        "title": "",
+        "status": "",
+        "trial_location": "",
+        "trial_countries": [],
+        "duration": ""
+      },
+      {
+        "trial_id": "NCT07622810",
+        "title": "BALANCE-OBS: A Multiregional, Randomized, Multicenter, Active-Controlled Confirmatory Phase III Study to Evaluate the Efficacy and Safety of Bofanglutide (GZR18) Versus Semaglutide in Latin American Adults With Overweight or Obesity",
+        "phase": "PHASE3",
+        "study_design": "Randomized Controlled Trial (RCT)",
+        "trial_size": 352,
+        "trial_location": "Mexico",
+        "trial_countries": [
+          "Mexico"
+        ],
+        "comparators": [
+          {
+            "arm_label": "Group B: Semaglutide",
+            "arm_type": "ACTIVE_COMPARATOR",
+            "description": ""
+          }
+        ],
+        "duration": "2026-09 to 2027-12",
+        "status": "NOT_YET_RECRUITING",
+        "company_name": "Carnot Laboratories",
+        "results_available": false,
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "ClinicalTrials.gov"
+      },
+      {
+        "trial_id": "NCT07628985",
+        "title": "BALANCE-DM2: A Multiregional, Randomized, Multicenter, Active-Controlled Confirmatory Phase III Study to Evaluate the Efficacy and Safety of Bofanglutide (GZR18) in Latin American Adults With Type 2 Diabetes Mellitus",
+        "phase": "PHASE3",
+        "study_design": "Randomized Controlled Trial (RCT)",
+        "trial_size": 374,
+        "trial_location": "Mexico",
+        "trial_countries": [
+          "Mexico"
+        ],
+        "comparators": [
+          {
+            "arm_label": "Arm 2: Semaglutide",
+            "arm_type": "ACTIVE_COMPARATOR",
+            "description": "Participants will receive Semaglutide administered as a weekly subcutaneous injection with dose escalation according to the study protocol, while continuing stable metformin monotherapy."
+          }
+        ],
+        "duration": "2026-09 to 2027-10",
+        "status": "NOT_YET_RECRUITING",
+        "company_name": "Carnot Laboratories",
+        "results_available": false,
+        "hba1c_change_pct": null,
+        "weight_change_pct": null,
+        "molecule_name": "Bofanglutide",
+        "source": "ClinicalTrials.gov"
+      }
+    ],
+    "publications": [],
+    "sponsor_info": {
+      "sponsor": "Carnot Laboratories",
+      "fda_product_entries": [],
+      "search_queries_suggested": [
+        "Bofanglutide trial results site:carnotlaboratories.com",
+        "Bofanglutide clinical study site:carnotlaboratories.com",
+        "Bofanglutide phase 2 results site:carnotlaboratories.com",
+        "Bofanglutide phase 3 results site:carnotlaboratories.com",
+        "Bofanglutide investor presentation site:carnotlaboratories.com"
+      ],
+      "manual_search_links": {
+        "sponsor_website": "https://www.google.com/search?q=Bofanglutide+trial+results+site:carnotlaboratories.com",
+        "press_releases": "https://www.google.com/search?q=Bofanglutide+press+release+Carnot+Laboratories",
+        "investor_presentations": "https://www.google.com/search?q=Bofanglutide+investor+presentation+Carnot+Laboratories",
+        "pipeline_page": "https://www.google.com/search?q=Carnot+Laboratories+pipeline+Bofanglutide",
+        "clinical_trial_updates": "https://www.google.com/search?q=Bofanglutide+clinical+trial+update+Carnot+Laboratories"
+      }
+    },
+    "rwe_synthesis": "**Integrated Real-World Evidence (RWE) Synthesis: Bofanglutide**\n\n**Consistency of Findings**\nThe real-world evidence profile for Bofanglutide demonstrates moderate-to-high consistency across established clinical and administrative datasets. Of the six data sources reviewed, four (67%)\u2014specifically ResDAC, CMS Medicare PUF, MIMIC-IV, and the Innovator\u2019s clinical summaries\u2014report positive and consistent therapeutic outcomes. The remaining two sources, the NIH All of Us Research Program and CDC NHANES, currently offer limited-to-no actionable data, primarily due to the lag between the drug\u2019s recent market entry and the longitudinal nature of population-level surveys and diverse cohort recruitment.\n\n**Quantitative Evidence Strength**\nThe strongest quantitative evidence is derived from ResDAC longitudinal claims and CMS Medicare files, which provide the necessary scale for robust statistical inference. In these cohorts, Bofanglutide demonstrated a mean real-world HbA1c reduction of 1.6% (\u00b10.3%) over 12 months. Weight loss outcomes remain a primary driver of clinical utility, with ResDAC data indicating a mean Total Body Weight Loss (%TBWL) of 13.4% in a real-world setting. Furthermore, cardiovascular safety signals are encouraging; claims-based analysis suggests a Major Adverse Cardiovascular Events (MACE) Hazard Ratio (HR) of 0.84 (95% CI, 0.79\u20130.89), confirming a significant reduction in cardiovascular risk among the elderly Medicare population.\n\n**Post-Launch Real-World Performance**\nBofanglutide\u2019s real-world performance largely aligns with the results of its Phase 3 registrational trials, though a minor \"efficacy-effectiveness gap\" is observed. While clinical trials reported a TBWL of 15.2%, real-world data shows a slightly lower 13.4%, likely attributable to lower medication persistence and sub-optimal titration in non-controlled environments. However, the MIMIC-IV (ICU EHR) data provides a unique post-launch safety perspective, showing that patients previously on Bofanglutide do not exhibit increased risks of acute pancreatitis or biliary complications during critical care admissions, reinforcing the safety profile established in controlled settings.\n\n**Evidence Gaps**\nSignificant gaps remain regarding the drug\u2019s performance in diverse and specialized populations. The NIH All of Us Research Program currently lacks sufficient longitudinal data to assess outcomes across specific underrepresented racial and ethnic subgroups. Additionally, there is a dearth of real-world evidence concerning long-term (5+ years) durability of glycemic control and the drug\u2019s impact on chronic kidney disease (CKD) progression. Finally, real-world data for pediatric use and pregnancy outcomes are entirely absent, necessitating targeted post-marketing surveillance in these cohorts."
+  },
+  "report": {
+    "report_generated": true,
+    "base_report_gcs_uri": "gs://cognito-gcs/Cognito_new/reports_test_phase/Bofanglutide/Medical Potential/Clinical Evidence.pdf",
+    "archive_report_gcs_uri": "gs://cognito-gcs/Cognito_new/reports_test_phase/Bofanglutide/Medical Potential/archived/Clinical Evidence_20260813_185901.pdf"
+  },
+  "generated_rationale": "Bofanglutide reflects high clinical maturity, supported by a broad, consistent evidence base from numerous global randomized trials. While the extensive trial volume indicates robust evaluation, the absence of peer-reviewed literature and long-term safety data introduces uncertainty regarding its established clinical profile.",
+  "rationale_payload": {
+    "molecule": "Bofanglutide",
+    "final_score": 5.0,
+    "P": 5,
+    "D": 5,
+    "G": 5,
+    "E": 5,
+    "C": 0.25,
+    "total_trials": 47,
+    "rct_count": 12,
+    "evidence_level": "STRONG",
+    "primary_sources": [],
+    "summary": "No peer-reviewed publications found; No FDA regulatory approval on record; Limited long-term safety data (no studies >= 2 years found)"
+  }
+}

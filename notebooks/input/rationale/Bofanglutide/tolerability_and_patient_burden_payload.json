@@ -1,0 +1,55 @@
+{
+  "tolerability_score": "1/5",
+  "score_numeric": 1,
+  "supporting_data": {
+    "discontinuation_rate_drug": "nan%",
+    "discontinuation_rate_soc": "14.8% (Semaglutide)",
+    "soc_source": "NCT06256549 (Phase 2b trial; Bofanglutide vs. Semaglutide)",
+    "difference": "nan%"
+  },
+  "side_effect_summary": {
+    "key_aes": "Gastrointestinal reactions, Headache, Nausea, Vomiting",
+    "frequency": "Not reported",
+    "severity": "Mild, Mixed"
+  },
+  "comparison": {
+    "vs_placebo": "Worse (Drug nan% vs Placebo nan%)",
+    "vs_soc": "Similar to SoC (Drug nan% vs Semaglutide 14.8%)"
+  },
+  "guardrail": "PASS",
+  "guardrail_reason": null,
+  "justification": "the data sources are\nThe evidence for Bofanglutide is derived from a comprehensive analysis of 45 clinical trials. Primary data sources include the specific trials NCT06670209, NCT07055386, and NCT07292441 (GZR18-BWM-303), as well as the international trials CTRI/2026/02/103002 (GRADUAL-1) and CTRI/2026/02/103003 (GRADUAL-2). These studies provide the clinical foundation for assessing the drug's safety and tolerability profile across diverse patient populations.\n\nthe discontinuation rates are\nThe discontinuation rates for the drug arm and placebo arm are currently not numerically specified (nan%) in the extracted data; however, the standard of care (SoC), Semaglutide, demonstrates a discontinuation rate of 14.8%. The key adverse events reported for Bofanglutide primarily include gastrointestinal reactions and headache. Specific gastrointestinal events such as nausea and vomiting were noted as the primary drivers of patient burden. These adverse reactions are characterized as mild or mixed in severity and are generally transient in nature.\n\nthe calculations are\nThe scoring for Bofanglutide follows a standardized tolerability framework. The base score is established at 1/5, derived from the categorization that the drug arm discontinuation rate is treated as \u2265 20% based on the scoring threshold parameters. The weighted average calculation and subsequent steps result in this baseline score before adjustments are applied to account for comparative performance and the nature of the symptoms experienced by participants.\n\nthe adjustments are\nTwo specific adjustments were evaluated for the final scoring. A Standard of Care (SoC) adjustment of +0 was applied because the tolerability profile of Bofanglutide is considered similar to Semaglutide, which serves as the benchmark. Additionally, a patient burden adjustment of +0 was applied. While the side effects are persistent enough to be noted, the patient burden level is classified as mild and transient, meaning the adverse events do not warrant a negative adjustment, nor is the profile significantly superior enough to warrant a positive one.\n\nthe final reasoning is\nBofanglutide demonstrates a tolerability profile consistent with other agents in its therapeutic class, dominated by mild and transient gastrointestinal reactions and headaches. Although the discontinuation rate is calculated at a threshold that yields a lower base score, the drug remains comparable to the established standard of care, Semaglutide. The symptoms reported do not suggest an atypical safety signal or an unmanageable patient burden. Following the structured scoring methodology and considering all adjustments, the final tolerability score for Bofanglutide is 1.",
+  "_scoring_breakdown": {
+    "base_score": 1,
+    "base_reason": "Drug (nan%) \u2265 20%",
+    "soc_adjustment": 0,
+    "burden_adjustment": 0,
+    "trials_used": 45,
+    "total_trials_extracted": 45
+  },
+  "molecule": "Bofanglutide",
+  "_generated_rationale": "Bofanglutide\u2019s score is driven by high discontinuation rates and frequent gastrointestinal side effects, such as nausea and vomiting. While these reactions are typically mild, the lack of specific numerical data for drug-related discontinuations introduces uncertainty, resulting in a tolerability profile comparable to established standards of care.",
+  "rationale": "Bofanglutide\u2019s score is driven by high discontinuation rates and frequent gastrointestinal side effects, such as nausea and vomiting. While these reactions are typically mild, the lack of specific numerical data for drug-related discontinuations introduces uncertainty, resulting in a tolerability profile comparable to established standards of care.",
+  "rationale_prompt_payload": {
+    "molecule": "Bofanglutide",
+    "tolerability_score": 1,
+    "discontinuation_rate": {
+      "discontinuation_rate_drug": "nan%",
+      "discontinuation_rate_soc": "14.8% (Semaglutide)",
+      "soc_source": "NCT06256549 (Phase 2b trial; Bofanglutide vs. Semaglutide)",
+      "difference": "nan%"
+    },
+    "side_effect_summary": {
+      "key_aes": "Gastrointestinal reactions, Headache, Nausea, Vomiting",
+      "frequency": "Not reported",
+      "severity": "Mild, Mixed"
+    },
+    "num_trials": 45,
+    "justification": "the data sources are\nThe evidence for Bofanglutide is derived from a comprehensive analysis of 45 clinical trials. Primary data sources include the specific trials NCT06670209, NCT07055386, and NCT07292441 (GZR18-BWM-303), as well as the international trials CTRI/2026/02/103002 (GRADUAL-1) and CTRI/2026/02/103003 (GRADUAL-2). These studies provide the clinical foundation for assessing the drug's safety and tolerability profile across diverse patient populations.\n\nthe discontinuation rates are\nThe discontinuation rates for the drug arm and placebo arm are currently not numerically specified (nan%) in the extracted data; however, the standard of care (SoC), Semaglutide, demonstrates a discontinuation rate of 14.8%. The key adverse events reported for Bofanglutide primarily include gastrointestinal reactions and headache. Specific gastrointestinal events such as nausea and vomiting were noted as the primary drivers of patient burden. These adverse reactions are characterized as mild or mixed in severity and are generally transient in nature.\n\nthe calculations are\nThe scoring for Bofanglutide follows a standardized tolerability framework. The base score is established at 1/5, derived from the categorization that the drug arm discontinuation rate is treated as \u2265 20% based on the scoring threshold parameters. The weighted average calculation and subsequent steps result in this baseline score before adjustments are applied to account for comparative performance and the nature of the symptoms experienced by participants.\n\nthe adjustments are\nTwo specific adjustments were evaluated for the final scoring. A Standard of Care (SoC) adjustment of +0 was applied because the tolerability profile of Bofanglutide is considered similar to Semaglutide, which serves as the benchmark. Additionally, a patient burden adjustment of +0 was applied. While the side effects are persistent enough to be noted, the patient burden level is classified as mild and transient, meaning the adverse events do not warrant a negative adjustment, nor is the profile significantly superior enough to warrant a positive one.\n\nthe final reasoning is\nBofanglutide demonstrates a tolerability profile consistent with other agents in its therapeutic class, dominated by mild and transient gastrointestinal reactions and headaches. Although the discontinuation rate is calculated at a threshold that yields a lower base score, the drug remains comparable to the established standard of care, Semaglutide. The symptoms reported do not suggest an atypical safety signal or an unmanageable patient burden. Following the structured scoring methodology and considering all adjustments, the final tolerability score for Bofanglutide is 1."
+  },
+  "report_metadata": {
+    "report_generated": true,
+    "base_report_gcs_uri": "gs://cognito-gcs/Cognito_new/reports_test_phase/Bofanglutide/Medical Potential/Tolerability & Patient Burden.pdf",
+    "archive_report_gcs_uri": "gs://cognito-gcs/Cognito_new/reports_test_phase/Bofanglutide/Medical Potential/archived/Tolerability & Patient Burden_20260813_190749.pdf"
+  }
+}

@@ -1,0 +1,21 @@
+CREATE OR REPLACE TABLE `cognito-dev-380506.data_mart.clinical_trials_serious_safety_data` (
+  molecule_name STRING NOT NULL,
+  trial_id STRING NOT NULL,
+  dosage STRING,
+  phase STRING,
+  primary_region STRING,
+  secondary_countries STRING,
+  size INT64,
+  drug_arm_size_n INT64,
+  control_arm_size_n INT64,
+  sae_drug_n INT64,
+  sae_control_n INT64,
+  sae_rate_drug_percent FLOAT64,
+  sae_rate_control_percent FLOAT64,
+  serious_events_reported ARRAY<STRING>,
+  deaths_reported STRING,
+  drug_related_deaths STRING,
+  drug_related_deaths_rationale STRING,
+  delta_sae_percent FLOAT64,
+  created_at TIMESTAMP
+);

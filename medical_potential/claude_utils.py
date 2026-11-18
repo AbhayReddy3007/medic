@@ -131,6 +131,64 @@ def extract_citations(message) -> list[dict[str, Any]]:
     return list(seen.values())
 
 
+WEB_FETCH_TOOL = {
+    "name": "web_fetch",
+    "description": (
+        "Fetch the text content of one web page or PDF by exact URL. Only URLs from the "
+        "provided source list can be fetched. Returns the page text (truncated if long)."
+    ),
+    "input_schema": {
+        "type": "object",
+        "properties": {"url": {"type": "string", "description": "Exact URL from the source list."}},
+        "required": ["url"],
+    },
+}
+FETCH_TIMEOUT_SECONDS = 30
+MAX_FETCH_CHARS = 30_000
+_FETCH_HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; moa-eval-fetcher/1.0)"}
+
+
+def _norm_url(url: str | None) -> str:
+    return (url or "").strip().rstrip("/").lower()
+
+
+def fetch_page_text(url: str) -> tuple[str, str]:
+    """Download a URL and return (final_url, text). Handles HTML and PDF."""
+    import io
+
+    import requests
+
+    response = requests.get(url, headers=_FETCH_HEADERS, timeout=FETCH_TIMEOUT_SECONDS, allow_redirects=True)
+    response.raise_for_status()
+    content_type = response.headers.get("content-type", "").lower()
+    if "pdf" in content_type or response.url.lower().endswith(".pdf"):
+        import pymupdf
+
+        with pymupdf.open(stream=io.BytesIO(response.content), filetype="pdf") as doc:
+            text = "\n".join(page.get_text() for page in doc)
+    else:
+        from bs4 import BeautifulSoup
+
+        soup = BeautifulSoup(response.text, "html.parser")
+        for tag in soup(["script", "style", "noscript", "nav", "footer", "header"]):
+            tag.decompose()
+        text = " ".join(soup.get_text(" ").split())
+    return response.url, text[:MAX_FETCH_CHARS]
+
+
+def _run_web_fetch(url: str, allowed: set[str], fetched: dict[str, dict[str, Any]]) -> str:
+    if _norm_url(url) not in allowed:
+        return "Error: URL is not in the provided source list; only listed URLs can be fetched."
+    try:
+        final_url, text = fetch_page_text(url)
+    except Exception as error:  # network/parse failures are reported to the model, not raised
+        return f"Error: could not fetch {url}: {type(error).__name__}: {error}"
+    # Count both the requested URL and its post-redirect URL as retrieved.
+    for retrieved in (url, final_url):
+        fetched.setdefault(_norm_url(retrieved), {"url": retrieved, "title": None})
+    return text or "Error: page contained no extractable text."
+
+
 def claude_api_call(
     prompt: str,
     model: str,
@@ -143,6 +201,8 @@ def claude_api_call(
     pdf_attachments: list[tuple[str, bytes]] | None = None,
     thinking_budget_tokens: int | None = None,
     return_citations: bool = False,
+    fetch_urls: list[str] | None = None,
+    max_web_fetches: int = 10,
 ) -> str | tuple[str, list[dict[str, Any]]]:
     """Call Claude on Vertex AI with optional web search, PDF inputs and thinking.
 
@@ -158,6 +218,9 @@ def claude_api_call(
         pdf_attachments: List of (name, bytes) PDFs sent as document blocks.
         thinking_budget_tokens: Enables extended thinking with this budget (>=1024).
         return_citations: Return (text, extract_citations(message)).
+        fetch_urls: Enables a client-side `web_fetch` tool restricted to exactly these
+            URLs (no search). Citations returned are the pages actually fetched.
+        max_web_fetches: Maximum fetch calls before the model must answer.
     """
     content: list[dict[str, Any]] = [{"type": "text", "text": prompt}]
     for _, pdf_bytes in pdf_attachments or []:
@@ -186,12 +249,17 @@ def claude_api_call(
         if allowed_domains:
             tool["allowed_domains"] = list(allowed_domains)
         request["tools"] = [tool]
+    if fetch_urls:
+        request["tools"] = request.get("tools", []) + [WEB_FETCH_TOOL]
     if thinking_budget_tokens:
         if max_output_tokens <= thinking_budget_tokens:
             raise ValueError("max_output_tokens must be greater than thinking_budget_tokens")
         request["thinking"] = {"type": "enabled", "budget_tokens": thinking_budget_tokens}
     else:
         request["temperature"] = temperature
+
+    if fetch_urls:
+        return _claude_fetch_loop(request, model, fetch_urls, max_web_fetches, return_citations)
 
     client = _get_client()
     retry_count = 0
@@ -220,3 +288,52 @@ def claude_api_call(
             )
             time.sleep(backoff_delay)
             backoff_delay *= 2
+
+
+def _stream_with_retries(client: AnthropicVertex, request: dict[str, Any]):
+    retry_count = 0
+    backoff_delay = INITIAL_BACKOFF
+    while True:
+        try:
+            with client.messages.stream(**request) as stream:
+                return stream.get_final_message()
+        except _RETRYABLE_ERRORS as error:
+            retry_count += 1
+            if retry_count > MAX_RETRIES:
+                logger.warning("Claude max retries exceeded: %s", error)
+                raise
+            logger.warning("Claude request failed with %s; retry %s/%s", type(error).__name__, retry_count, MAX_RETRIES)
+            time.sleep(backoff_delay)
+            backoff_delay *= 2
+
+
+def _claude_fetch_loop(
+    request: dict[str, Any],
+    model: str,
+    fetch_urls: list[str],
+    max_web_fetches: int,
+    return_citations: bool,
+):
+    """Run the client-side web_fetch tool loop until the model returns a final answer."""
+    client = _get_client()
+    allowed = {_norm_url(url) for url in fetch_urls}
+    fetched: dict[str, dict[str, Any]] = {}
+    messages = list(request["messages"])
+    fetch_count = 0
+    while True:
+        message = _stream_with_retries(client, {**request, "messages": messages})
+        _record_claude_response_stats(message, model, web_search=True)
+        tool_uses = [block for block in message.content if getattr(block, "type", None) == "tool_use"]
+        if message.stop_reason != "tool_use" or not tool_uses:
+            text = extract_text(message)
+            return (text, list(fetched.values())) if return_citations else text
+        messages.append({"role": "assistant", "content": message.content})
+        results = []
+        for block in tool_uses:
+            if fetch_count >= max_web_fetches:
+                output = "Error: fetch limit reached. Answer using the pages already retrieved."
+            else:
+                fetch_count += 1
+                output = _run_web_fetch((block.input or {}).get("url", ""), allowed, fetched)
+            results.append({"type": "tool_result", "tool_use_id": block.id, "content": output})
+        messages.append({"role": "user", "content": results})

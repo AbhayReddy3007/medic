@@ -44,23 +44,17 @@ def _sources_block(sources: list[dict]) -> str:
     return "\n".join(lines) if lines else "(no saved sources found for this run)"
 
 
-def _verify_prompt(claims: list[dict], row: pd.Series, sources: list[dict], restricted: bool) -> str:
-    scope = (
-        "Web search is restricted to the domains of the sources below. Search for and open the specific pages listed, "
-        "and use other pages on those domains only when needed to confirm or refute a claim."
-        if restricted
-        else "No saved sources were found, so search the open web, preferring authoritative primary sources."
-    )
-    return f"""You are an evidence reviewer for a Mechanism-of-Action Innovation assessment. The assessment was produced from the web sources listed below. Verify each factual claim independently by searching those sources; do not accept the generated justification as evidence.
+def _verify_prompt(claims: list[dict], row: pd.Series, sources: list[dict]) -> str:
+    return f"""You are an evidence reviewer for a Mechanism-of-Action Innovation assessment. The assessment was produced from the web sources listed below. Verify each factual claim independently by fetching those sources with the web_fetch tool; do not accept the generated justification as evidence.
 
 Drug: {row.get('drug_name')}
 Indication: {row.get('indication')}
 Analysis date: {row.get('analysis_date')}
 
-Sources the assessment drew on:
+Sources the assessment drew on (the only URLs web_fetch can open):
 {_sources_block(sources)}
 
-{scope}
+Fetch the pages most relevant to the claims, using the "used in" step hints. You cannot search; claims that the fetched pages do not address are "unverifiable".
 
 Claims:
 {json.dumps(claims, indent=2, default=str)}
@@ -76,25 +70,25 @@ Rules:
 1. Check that the source concerns this drug, mechanism, indication and time period. Evidence about a related molecule is not direct evidence.
 2. Absence of evidence is "unverifiable", not "contradicted". Mark "contradicted" only when a reliable source directly conflicts with the claim.
 3. Separate what the source reports from your interpretation. Do not infer approval, efficacy, validation or failure from an indirect association.
-4. Cite only pages your search actually retrieved. Never construct, shorten or guess a URL.
-5. For each claim write 2-4 sentences naming the specific finding and the source's authority; for unverifiable claims say what was searched and what was missing.
+4. Cite only pages you actually fetched. Never construct, shorten or guess a URL.
+5. For each claim write 2-4 sentences naming the specific finding and the source's authority; for unverifiable claims say what was fetched and what was missing.
 
 Return JSON only as {{"verifications": [{{"claim_id": "c1", "verdict": "supported|contradicted|unverifiable", "evidence": "2-4 sentences", "sources": [{{"title": "title or organisation", "url": "retrieved URL"}}]}}]}}.
-Return one verification for every input claim, preserving each claim_id. Use an empty sources list when no reliable source was retrieved."""
+Return one verification for every input claim, preserving each claim_id. Use an empty sources list when no reliable source was fetched."""
 
 
 def _norm_url(url: str | None) -> str:
     return (url or "").strip().rstrip("/").lower()
 
 
-def _verify_batch(batch: list[dict], row: pd.Series, saved: dict, model: str, restrict: bool) -> list[dict]:
-    domains = saved["domains"] if restrict and saved["domains"] else None
+def _verify_batch(batch: list[dict], row: pd.Series, saved: dict, model: str) -> list[dict]:
+    if not saved["sources"]:
+        raise ValueError("no saved sources to fetch")
     result, citations = call_claude_json(
-        _verify_prompt(batch, row, saved["sources"], restricted=bool(domains)),
+        _verify_prompt(batch, row, saved["sources"]),
         model=model,
-        web_search=True,
-        allowed_domains=domains,
-        max_web_searches=max(6, len(batch) * 2),
+        fetch_urls=[source["url"] for source in saved["sources"]],
+        max_web_fetches=max(6, len(batch) * 2),
     )
     retrieved = {_norm_url(c["url"]) for c in citations}
     saved_urls = {_norm_url(s["url"]) for s in saved["sources"]}
@@ -104,7 +98,7 @@ def _verify_batch(batch: list[dict], row: pd.Series, saved: dict, model: str, re
         cited = [src for src in (item.get("sources") or []) if isinstance(src, dict)]
         by_id[item.get("claim_id")] = {
             **item,
-            # Only URLs the search tool actually returned count as real evidence.
+            # Only URLs the fetch tool actually retrieved count as real evidence.
             "verified_sources": [
                 {**src, "in_saved_sources": _norm_url(src.get("url")) in saved_urls}
                 for src in cited
@@ -113,7 +107,7 @@ def _verify_batch(batch: list[dict], row: pd.Series, saved: dict, model: str, re
             "unretrieved_cited_urls": [
                 src.get("url") for src in cited if _norm_url(src.get("url")) not in retrieved
             ],
-            "search_scope": "saved_source_domains" if domains else "open_web",
+            "search_scope": "saved_sources_fetch",
         }
     missing = {"verdict": "error", "evidence": "Verifier returned no result for this claim", "verified_sources": []}
     return [{**claim, **by_id.get(claim.get("claim_id"), missing)} for claim in batch]
@@ -123,19 +117,18 @@ def verify_claims(
     claims: list[dict],
     row: pd.Series,
     model: str = CLAUDE_SONNET_MODEL,
-    restrict_to_saved_sources: bool = True,
 ) -> list[dict]:
-    """Verify claims with Claude web search, scoped to the domains of the sources saved for this run."""
+    """Verify claims by letting Claude fetch the source pages saved for this run."""
     if not claims:
         return []
     saved = load_saved_sources(row)
     if not saved["sources"]:
-        logger.warning("No saved sources found for %s; verifying against the open web", row.get("drug_name"))
+        logger.warning("No saved sources found for %s; claims will be marked as errors", row.get("drug_name"))
     verified: list[dict] = []
     for start in range(0, len(claims), CLAIMS_PER_CALL):
         batch = claims[start : start + CLAIMS_PER_CALL]
         try:
-            verified.extend(_verify_batch(batch, row, saved, model, restrict_to_saved_sources))
+            verified.extend(_verify_batch(batch, row, saved, model))
         except Exception as error:
             logger.exception("Claim verification batch failed for %s", row.get("drug_name"))
             verified.extend(
@@ -156,13 +149,12 @@ def _safe_extract(row: pd.Series, model: str) -> list[dict]:
 def run_claim_verification(
     rows: pd.DataFrame,
     model: str = CLAUDE_SONNET_MODEL,
-    restrict_to_saved_sources: bool = True,
 ) -> pd.DataFrame:
     records = []
     with ThreadPoolExecutor(max_workers=min(5, max(1, len(rows)))) as executor:
         extracted = list(executor.map(lambda item: _safe_extract(item[1], model), rows.iterrows()))
     for (_, row), claims in zip(rows.iterrows(), extracted):
-        records.extend(verify_claims(claims, row, model, restrict_to_saved_sources))
+        records.extend(verify_claims(claims, row, model))
     return pd.DataFrame(records)
 
 

@@ -29,7 +29,7 @@ def parse_json_response(text: str) -> Any:
     if "```" in cleaned:
         cleaned = cleaned.replace("```json", "").replace("```", "").strip()
     if cleaned and cleaned[0] not in "{[":
-        # Web-search responses often put prose before the JSON; keep the outermost object.
+        # Tool-using responses often put prose before the JSON; keep the outermost object.
         start, end = cleaned.find("{"), cleaned.rfind("}")
         if start != -1 and end > start:
             cleaned = cleaned[start : end + 1]
@@ -87,7 +87,7 @@ def text_value(row: pd.Series, field: str) -> str:
     return "" if pd.isna(value) else str(value).strip()
 
 
-# --- Claude helpers (web search over the sources saved by the MoA run) -------------
+# --- Claude helpers (web fetch over the sources saved by the MoA run) -------------
 
 SOURCES_DIR = Path(__file__).resolve().parent.parent / "sources"
 _VERTEX_REDIRECT_HOST = "vertexaisearch.cloud.google.com"
@@ -97,9 +97,8 @@ def call_claude_json(
     prompt: str,
     *,
     model: str = CLAUDE_SONNET_MODEL,
-    web_search: bool = False,
-    allowed_domains: list[str] | None = None,
-    max_web_searches: int = 8,
+    fetch_urls: list[str] | None = None,
+    max_web_fetches: int = 10,
     max_output_tokens: int = 16_000,
 ) -> tuple[Any, list[dict]]:
     """Call Claude and parse the JSON answer; returns (data, web_citations)."""
@@ -108,9 +107,8 @@ def call_claude_json(
         model=model,
         temperature=0,
         max_output_tokens=max_output_tokens,
-        web_search=web_search,
-        max_web_searches=max_web_searches,
-        allowed_domains=allowed_domains,
+        fetch_urls=fetch_urls,
+        max_web_fetches=max_web_fetches,
         return_citations=True,
     )
     return parse_json_response(text), citations

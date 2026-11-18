@@ -6,8 +6,10 @@ mechanism of action is for a given indication using Gemini with Google Search.
 
 import json
 import asyncio
+import re
 import time
 import logging
+from pathlib import Path
 from contextvars import ContextVar
 from datetime import datetime
 
@@ -851,6 +853,49 @@ def _grounding_urls_by_step(
     return urls_by_step
 
 
+SOURCES_DIR = Path(__file__).resolve().parent / "sources"
+
+
+def _save_sources_json(
+    molecule_name: str,
+    grounding_calls: list[dict[str, object]],
+    output: dict | None = None,
+    indication: str | None = None,
+) -> Path | None:
+    """Write every web source used in this run to sources/<drug>/sources_<timestamp>.json.
+
+    Best-effort: a failure here is logged and never affects the assessment.
+    """
+    try:
+        now = datetime.now()
+        folder_name = re.sub(r"[^\w.-]+", "_", molecule_name.strip()).strip("._") or "unknown"
+        drug_dir = SOURCES_DIR / folder_name
+        drug_dir.mkdir(parents=True, exist_ok=True)
+
+        steps: dict[str, list] = {name: [] for name in GROUNDING_CALL_NAMES}
+        for call in grounding_calls:
+            step_name = str(call.get("step_name"))
+            records = call.get("grounding_urls")
+            steps.setdefault(step_name, []).extend(records if isinstance(records, list) else [])
+
+        payload = {
+            "drug_name": molecule_name,
+            "indication": indication,
+            "run_timestamp": now.isoformat(timespec="seconds"),
+            "total_unique_urls": len(_dedupe_grounding_urls(grounding_calls)),
+            "sources_by_step": steps,
+            # Sources the final-scoring model itself listed (not grounding metadata).
+            "model_listed_sources": (output or {}).get("sources_used", {}),
+        }
+        path = drug_dir / f"sources_{now.strftime('%Y%m%d_%H%M%S')}.json"
+        path.write_text(json.dumps(payload, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
+        logger.info("[MoA] Saved %s sources to %s", payload["total_unique_urls"], path)
+        return path
+    except Exception:
+        logger.exception("[MoA] Could not save sources JSON for '%s'", molecule_name)
+        return None
+
+
 def _format_output(
     drug_name: str,
     moa: str,
@@ -1029,6 +1074,8 @@ async def get_moa_innovation_assessment(molecule_name: str, indication: str = No
     logger.info("%s", "=" * 80)
 
     all_data = {}
+    output = None
+    ind = indication
     grounding_calls: list[dict[str, object]] = []
     grounding_token = _GROUNDING_CALLS.set(grounding_calls)
 
@@ -1207,4 +1254,6 @@ Return JSON: {{"mechanism_of_action": "the mechanism", "indication": "primary in
         elapsed = time.time() - t0
         logger.exception("\n[MoA] ERROR after %.1fs: %s: %s", elapsed, type(e).__name__, e)
     finally:
+        # Saved even when the run fails, so partial sources are kept.
+        _save_sources_json(molecule_name, grounding_calls, output, ind)
         _GROUNDING_CALLS.reset(grounding_token)

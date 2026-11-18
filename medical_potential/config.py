@@ -60,6 +60,11 @@ GEMINI_FLASH_PREVIEW_MODEL = os.getenv("GEMINI_FLASH_PREVIEW_MODEL", "gemini-3-f
 GEMINI_PRO_MODEL = os.getenv("GEMINI_PRO_MODEL", "gemini-3.1-pro-preview")
 GEMINI_SERVICE_TIER = os.getenv("GEMINI_SERVICE_TIER", None)
 
+# Claude on Vertex AI (Anthropic SDK). Model ids use Vertex naming, e.g. "claude-sonnet-4-5@20250929".
+CLAUDE_VERTEX_REGION = os.getenv("CLAUDE_VERTEX_REGION", "global")
+CLAUDE_SONNET_MODEL = os.getenv("CLAUDE_SONNET_MODEL", "claude-sonnet-4-5@20250929")
+CLAUDE_OPUS_MODEL = os.getenv("CLAUDE_OPUS_MODEL", "claude-opus-4-1@20250805")
+
 # ---------------------------------------------------------------------------
 # Big Query Config
 # ---------------------------------------------------------------------------

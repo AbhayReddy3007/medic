@@ -4,8 +4,12 @@ from concurrent.futures import ThreadPoolExecutor
 
 import pandas as pd
 
-from medical_potential.config import GEMINI_PRO_MODEL
-from .utils import JUSTIFICATION_FIELDS, call_gemini_json, source_key, text_value
+import logging
+
+from medical_potential.config import CLAUDE_SONNET_MODEL
+from .utils import JUSTIFICATION_FIELDS, call_claude_json, source_key, text_value
+
+logger = logging.getLogger(__name__)
 
 RUBRIC = """SCORING RULES (from documentation - follow EXACTLY):
 
@@ -94,8 +98,8 @@ Example:
 {{"score_supported": true, "score_supported_rationale": "The justification identifies a validated mechanism and limited differentiation, supporting the assigned score.", "why_not_higher_valid": true, "why_not_higher_valid_rationale": "It explains that the evidence does not show the superior implementation required for the next higher category.", "internal_consistency": true, "internal_consistency_rationale": "The mechanism, differentiation, and classification claims are consistent with one another.", "overall_rating": 4, "overall_rating_rationale": "The assessment is strongly supported overall, with clear evidence for the assigned score and no material contradiction, although the differentiation is limited."}}"""
 
 
-def judge_row(row: pd.Series, model: str = GEMINI_PRO_MODEL) -> dict:
-    faithfulness = call_gemini_json(_faithfulness_prompt(row), model=model)
+def judge_row(row: pd.Series, model: str = CLAUDE_SONNET_MODEL) -> dict:
+    faithfulness, _ = call_claude_json(_faithfulness_prompt(row), model=model)
     return {
         "source_key": source_key(row),
         "drug_name": row.get("drug_name"),
@@ -111,7 +115,15 @@ def judge_row(row: pd.Series, model: str = GEMINI_PRO_MODEL) -> dict:
     }
 
 
-def run_llm_judge(rows: pd.DataFrame, model: str = GEMINI_PRO_MODEL) -> pd.DataFrame:
+def _safe_judge_row(row: pd.Series, model: str) -> dict:
+    try:
+        return judge_row(row, model)
+    except Exception as error:
+        logger.exception("LLM judge failed for %s", row.get("drug_name"))
+        return {"source_key": source_key(row), "drug_name": row.get("drug_name"), "judge_error": str(error)}
+
+
+def run_llm_judge(rows: pd.DataFrame, model: str = CLAUDE_SONNET_MODEL) -> pd.DataFrame:
     with ThreadPoolExecutor(max_workers=min(5, max(1, len(rows)))) as executor:
-        results = list(executor.map(lambda item: judge_row(item[1], model), rows.iterrows()))
+        results = list(executor.map(lambda item: _safe_judge_row(item[1], model), rows.iterrows()))
     return pd.DataFrame(results)

@@ -138,6 +138,7 @@ def claude_api_call(
     max_output_tokens: int = DEFAULT_MAX_TOKENS,
     web_search: bool = False,
     max_web_searches: int = 5,
+    allowed_domains: list[str] | None = None,
     system_instruction: str | None = None,
     pdf_attachments: list[tuple[str, bytes]] | None = None,
     thinking_budget_tokens: int | None = None,
@@ -152,6 +153,7 @@ def claude_api_call(
         max_output_tokens: Must exceed thinking_budget_tokens when thinking is on.
         web_search: Enable the server-side web search tool (must be enabled for
             the model/region in Vertex).
+        allowed_domains: Restrict web search to these domains (web_search only).
         system_instruction: Optional system prompt.
         pdf_attachments: List of (name, bytes) PDFs sent as document blocks.
         thinking_budget_tokens: Enables extended thinking with this budget (>=1024).
@@ -176,9 +178,14 @@ def claude_api_call(
     if system_instruction:
         request["system"] = system_instruction
     if web_search:
-        request["tools"] = [
-            {"type": WEB_SEARCH_TOOL_TYPE, "name": "web_search", "max_uses": max_web_searches}
-        ]
+        tool: dict[str, Any] = {
+            "type": WEB_SEARCH_TOOL_TYPE,
+            "name": "web_search",
+            "max_uses": max_web_searches,
+        }
+        if allowed_domains:
+            tool["allowed_domains"] = list(allowed_domains)
+        request["tools"] = [tool]
     if thinking_budget_tokens:
         if max_output_tokens <= thinking_budget_tokens:
             raise ValueError("max_output_tokens must be greater than thinking_budget_tokens")

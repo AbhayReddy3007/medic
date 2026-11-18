@@ -62,7 +62,7 @@ GEMINI_SERVICE_TIER = os.getenv("GEMINI_SERVICE_TIER", None)
 
 # Claude on Vertex AI (Anthropic SDK). Model ids use Vertex naming, e.g. "claude-sonnet-4-5@20250929".
 CLAUDE_VERTEX_REGION = os.getenv("CLAUDE_VERTEX_REGION", "global")
-CLAUDE_SONNET_MODEL = os.getenv("CLAUDE_SONNET_MODEL", "claude-sonnet-4-5@20250929")
+CLAUDE_SONNET_MODEL = os.getenv("CLAUDE_SONNET_MODEL", "claude-sonnet-4-6")
 CLAUDE_OPUS_MODEL = os.getenv("CLAUDE_OPUS_MODEL", "claude-opus-4-1@20250805")
 
 # ---------------------------------------------------------------------------

@@ -100,6 +100,8 @@ def call_claude_json(
     fetch_urls: list[str] | None = None,
     max_web_fetches: int = 10,
     max_output_tokens: int = 16_000,
+    web_search: bool = False,
+    max_web_searches: int = 5,
 ) -> tuple[Any, list[dict]]:
     """Call Claude and parse the JSON answer; returns (data, web_citations)."""
     text, citations = claude_api_call(
@@ -109,6 +111,8 @@ def call_claude_json(
         max_output_tokens=max_output_tokens,
         fetch_urls=fetch_urls,
         max_web_fetches=max_web_fetches,
+        web_search=web_search,
+        max_web_searches=max_web_searches,
         return_citations=True,
     )
     return parse_json_response(text), citations

@@ -2,15 +2,35 @@
 
 Scores the clinical evidence behind a pharmaceutical molecule and turns the result into a short business report.
 
-Two scripts work together:
+## Folder structure
+
+```text
+clinical_evidence/
+  clinical_evidence.py            # Orchestrator: clinical_evidence_scoring (entry point)
+  bq_utils.py                     # BigQuery reads (trials) and write-back, flat row builders
+  llm_runtime.py                  # Gemini transport: global concurrency cap, plain + grounded calls
+  utils.py                        # Buffered logging, HTTP and text helpers
+  scoring_logic/
+    deterministic_scores.py       # P, D, G and the final-score formula
+    llm_scores.py                 # E and C (Gemini, with rule-based fallbacks)
+    evidence_assessment.py        # Evidence level, consolidation, gap identification
+  web_data_extraction/
+    molecule_normalization.py     # Step 0: openFDA + ClinicalTrials.gov
+    trial_sources.py              # Step 1: CT.gov, EU CTR, WHO ICTRP, merge
+    innovator.py                  # Step 2: FDA product entries, sponsor links
+    real_world_evidence.py        # Step 3: Google-Search-grounded RWE synthesis
+  generate_report_and_rationale/
+    generate_report.py            # PDF report
+    generate_rationale.py         # Short score rationale
+```
+
+The modules work together:
 
 | Script | What it does | Main output |
 |---|---|---|
 | `clinical_evidence.py` | Collects trial and real-world evidence for a molecule, scores it on five dimensions (P, D, G, E, C) and produces a final score out of 5 | Score  in GBQ table |
 | `generate_report.py` | Reads the GBQ table from the first script and writes an executive-friendly PDF | PDF report |
 | `generate_rationale.py` | Reads the GBQ table from the first script and writes an executive-friendly rationale for the generated score | 200 word summary |
-
-
 
 ---
 
@@ -42,7 +62,7 @@ BQ_SERVICE_ACCOUNT=<path to BigQuery service-account JSON key>
 | 0. Molecule normalisation | Resolves the generic name, brand names, sponsor and indications | openFDA, ClinicalTrials.gov |
 | 1. Global trial scan | Collects trials from four registries, enriches BigQuery trials with ClinicalTrials.gov detail, then merges and de-duplicates | BigQuery (`clinical_efficacy` table), ClinicalTrials.gov, EU Clinical Trials Register, WHO ICTRP |
 | 2. Innovator check | Looks up FDA product entries and builds sponsor-website search links | openFDA |
-| 3. Real-world evidence synthesis | Produces post-launch evidence summaries across six data sources and merges them into one synthesis (MIMIC-IV,CMS Medicare Files,ResDAC,CDC Open Data,NIH,Innovator websites)| Gemini (google search grounding) |
+| 3. Real-world evidence synthesis | Produces post-launch evidence summaries across six data sources and merges them into one synthesis (MIMIC-IV,CMS Medicare Files,ResDAC,CDC Open Data,NIH,Innovator websites). Each source call is grounded with Google Search and its source URLs are kept | Gemini (Google Search grounding) |
 | 4. Evidence quality assessment | Counts phases, designs, patients and results, and assigns an evidence level | Rule-based |
 | 5. Evidence consolidation | Checks whether HbA1c and weight endpoints agree across trials, and whether phases are replicated | Rule-based |
 | 6. Scoring | Computes P, D, G, E, C and the final score; lists evidence gaps | Rules and Gemini |
@@ -91,7 +111,7 @@ All gemini calls
 
 Everything else (molecule normalisation, registry searches, phase/design/geography scoring, evidence level, consolidation, gap identification, file writing) is plain code with no Gemini involvement.
 
-**Important to know about calls 1 and 2:** the "real-world evidence" is written by Gemini from its own training knowledge. The scripts do not query MIMIC-IV, CMS, ResDAC, CDC or All of Us directly. The prompts tell the model not to invent statistics, but figures in the synthesis, and the E and C scores derived from it, should be spot-checked before being relied on for decisions.
+**Grounding (calls 1):** each per-source RWE call runs with Google Search grounding, so summaries come from retrieved pages. The prompt tells the model to report only figures found in those pages. The grounding URLs are collected per source and de-duplicated, then returned as `rwe_grounding_urls` (and `rwe_grounding_urls_by_source` in `report_input_payload`) in the output payload cached to GCS. The synthesis (call 2) and the E and C scores are not grounded; they read the grounded summaries. The databases themselves (MIMIC-IV, CMS, ResDAC and so on) are still not queried directly, so figures should be spot-checked against the listed URLs before decisions rely on them.
 
 ---
 

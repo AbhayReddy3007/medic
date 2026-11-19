@@ -27,7 +27,9 @@ def build_bq_rows(results: list[dict[str, Any]], eval_run_id: str, model: str) -
     for result in results:
         row = dict(result)
         row.update({"eval_run_id": eval_run_id, "eval_timestamp": timestamp, "judge_model": model})
-        for key in ("claim_details", "judge_details"):
+        for key in (
+            "claim_details", "judge_details", "context_details", "context_precision_by_step", "relevance_details",
+        ):
             row[key] = _json_value(row.get(key))
         rows.append(row)
     return rows

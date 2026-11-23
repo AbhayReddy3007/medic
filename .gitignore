@@ -61,3 +61,4 @@ service.json
 *.csv
 *.xlsx
 *.pdf
+*.json

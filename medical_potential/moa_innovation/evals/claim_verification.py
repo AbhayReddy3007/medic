@@ -158,95 +158,9 @@ def run_claim_verification(
     return pd.DataFrame(records)
 
 
-def _open_web_prompt(claims: list[dict], row: pd.Series) -> str:
-    return f"""You are an evidence reviewer for a Mechanism-of-Action Innovation assessment. The claims below could not be checked against the assessment's own saved sources. Check each one independently with web search; do not accept the generated justification as evidence.
-
-Drug: {row.get('drug_name')}
-Indication: {row.get('indication')}
-Analysis date: {row.get('analysis_date')}
-
-Claims:
-{json.dumps(claims, indent=2, default=str)}
-
-Rules:
-1. Prefer regulators (FDA/EMA), ClinicalTrials.gov, peer-reviewed publications and current treatment guidelines. Company claims are secondary evidence.
-2. Check that the source concerns this drug, mechanism, indication and time period. Evidence about a related molecule is not direct evidence.
-3. Mark "contradicted" only when a reliable source directly conflicts with the claim. Absence of evidence is "unverifiable".
-4. Cite only pages you actually retrieved. Never construct or guess a URL.
-
-Return JSON only as {{"verifications": [{{"claim_id": "c1", "verdict": "supported|contradicted|unverifiable", "evidence": "2-3 sentences", "sources": [{{"title": "title", "url": "retrieved URL"}}]}}]}}.
-Return one verification for every claim_id."""
-
-
-def recheck_unverifiable_claims(
-    claim_rows: pd.DataFrame,
-    rows: pd.DataFrame,
-    model: str = CLAUDE_SONNET_MODEL,
-    max_web_searches: int = 8,
-) -> pd.DataFrame:
-    """Second pass: re-check claims the saved sources could not settle, using open web search.
-
-    Adds `open_web_verdict`, `open_web_evidence` and `open_web_sources` to those claims only. Claims already
-    supported or contradicted are left untouched, so factual accuracy = supported by either pass.
-    """
-    if claim_rows.empty or "verdict" not in claim_rows.columns:
-        return claim_rows
-    result = claim_rows.copy().reset_index(drop=True)
-    result["open_web_verdict"] = None
-    result["open_web_evidence"] = None
-    result["open_web_sources"] = None
-    rows_by_key = {source_key(row): row for _, row in rows.iterrows()}
-    pending = result[result["verdict"].isin(["unverifiable", "error"])]
-
-    for key, group in pending.groupby("source_key"):
-        row = rows_by_key.get(key)
-        if row is None:
-            continue
-        indices = list(group.index)
-        for start in range(0, len(indices), CLAIMS_PER_CALL):
-            batch_index = indices[start : start + CLAIMS_PER_CALL]
-            batch = [
-                {"claim_id": result.at[i, "claim_id"], "field": result.at[i, "field"], "claim": result.at[i, "claim"]}
-                for i in batch_index
-            ]
-            try:
-                parsed, citations = call_claude_json(
-                    _open_web_prompt(batch, row),
-                    model=model,
-                    web_search=True,
-                    max_web_searches=min(max_web_searches, max(4, len(batch) * 2)),
-                )
-            except Exception as error:
-                logger.exception("Open-web claim recheck failed for %s", row.get("drug_name"))
-                for i in batch_index:
-                    result.at[i, "open_web_verdict"] = "error"
-                    result.at[i, "open_web_evidence"] = f"Open-web recheck failed: {error}"
-                continue
-            retrieved = {_norm_url(c.get("url")) for c in citations}
-            items = parsed.get("verifications", []) if isinstance(parsed, dict) else []
-            by_id = {item.get("claim_id"): item for item in items if isinstance(item, dict)}
-            for i in batch_index:
-                item = by_id.get(result.at[i, "claim_id"])
-                if not item:
-                    result.at[i, "open_web_verdict"] = "error"
-                    result.at[i, "open_web_evidence"] = "Verifier returned no result for this claim"
-                    continue
-                cited = [s for s in (item.get("sources") or []) if isinstance(s, dict)]
-                verified = [s for s in cited if _norm_url(s.get("url")) in retrieved]
-                verdict = item.get("verdict")
-                # A verdict with no retrieved page behind it is not evidence.
-                if verdict in ("supported", "contradicted") and not verified:
-                    verdict = "unverifiable"
-                result.at[i, "open_web_verdict"] = verdict
-                result.at[i, "open_web_evidence"] = item.get("evidence")
-                result.at[i, "open_web_sources"] = verified
-    return result
-
-
 SUMMARY_COLUMNS = [
     "source_key", "claims_total", "claims_supported", "claims_contradicted", "claims_unverifiable",
-    "claims_error", "claims_supported_open_web", "claims_contradicted_open_web", "open_web_checked",
-    "claim_details",
+    "claims_error", "claim_details",
 ]
 
 
@@ -256,8 +170,6 @@ def summarize_claims(claims: pd.DataFrame) -> pd.DataFrame:
     grouped = []
     for key, group in claims.groupby("source_key"):
         counts = group["verdict"].value_counts()
-        has_open_web = "open_web_verdict" in group
-        open_web = group["open_web_verdict"].value_counts() if has_open_web else pd.Series(dtype=int)
         grouped.append({
             "source_key": key,
             "claims_total": len(group),
@@ -265,9 +177,6 @@ def summarize_claims(claims: pd.DataFrame) -> pd.DataFrame:
             "claims_contradicted": int(counts.get("contradicted", 0)),
             "claims_unverifiable": int(counts.get("unverifiable", 0)),
             "claims_error": int(counts.get("error", 0)),
-            "claims_supported_open_web": int(open_web.get("supported", 0)),
-            "claims_contradicted_open_web": int(open_web.get("contradicted", 0)),
-            "open_web_checked": bool(has_open_web and group["open_web_verdict"].notna().any()),
             "claim_details": group.to_dict("records"),
         })
     return pd.DataFrame(grouped, columns=SUMMARY_COLUMNS)

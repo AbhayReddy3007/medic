@@ -4,8 +4,7 @@ import pandas as pd
 
 # Every component is normalised to 0-1 before weighting.
 DEFAULT_WEIGHTS: dict[str, float] = {
-    "claim_precision": 0.25,     # claims supported by the sources the run retrieved / ALL claims
-    "factual_accuracy": 0.15,    # claims supported by those sources or by open web / ALL claims
+    "claim_precision": 0.40,     # claims supported by the sources the run retrieved (web fetch) / ALL claims
     "judge_faithfulness": 0.10,  # LLM judge: is the score supported by its own justification
     "context_precision": 0.15,   # retrieved sources that are relevant / all sources
     "field_relevance": 0.20,     # does each justification field answer its own question
@@ -22,17 +21,6 @@ def _ratio(numerator, denominator) -> float | None:
 def _claim_precision(row: pd.Series) -> float | None:
     """Supported / ALL claims. Unverifiable and errored claims count against the score."""
     return _ratio(row.get("claims_supported"), row.get("claims_total"))
-
-
-def _factual_accuracy(row: pd.Series) -> float | None:
-    checked = row.get("open_web_checked")
-    if pd.isna(checked) or not checked:
-        return None
-    supported = row.get("claims_supported")
-    extra = row.get("claims_supported_open_web")
-    if pd.isna(supported) or pd.isna(extra):
-        return None
-    return _ratio(int(supported) + int(extra), row.get("claims_total"))
 
 
 def _judge_faithfulness(row: pd.Series) -> float | None:
@@ -82,7 +70,6 @@ def build_eval_scores(
 
     components = {
         "claim_precision": result.apply(_claim_precision, axis=1) if len(result) else nan,
-        "factual_accuracy": result.apply(_factual_accuracy, axis=1) if len(result) else nan,
         "judge_faithfulness": result.apply(_judge_faithfulness, axis=1) if len(result) else nan,
         "context_precision": column("context_precision_score"),
         "field_relevance": column("field_relevance_score"),

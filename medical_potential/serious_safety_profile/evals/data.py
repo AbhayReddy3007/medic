@@ -142,17 +142,41 @@ def load_serious_safety_rows(molecules: list[str]) -> pd.DataFrame:
     """Latest cached payload per molecule from GCS, one eval row each."""
     from medical_potential.gcp_utils import get_gcs_client
 
-    bucket = get_gcs_client().bucket(GCS_BUCKET)
-    rows = []
+    client = get_gcs_client()
+    bucket = client.bucket(GCS_BUCKET)
+
+    # Molecule folders under the cache root, so names can be matched case-insensitively.
+    cache_prefix = f"{GCS_PIPELINE_CACHE_BASE_PATH.strip('/')}/"
+    listing = client.list_blobs(GCS_BUCKET, prefix=cache_prefix, delimiter="/")
+    list(listing)  # prefixes are only populated once the listing has been consumed
+    folders = {
+        prefix[len(cache_prefix):].strip("/").casefold(): prefix[len(cache_prefix):].strip("/")
+        for prefix in listing.prefixes
+    }
+
+    rows, missing = [], []
     for molecule in molecules:
-        blob = bucket.get_blob(payload_gcs_path(molecule))
+        folder = folders.get(molecule.strip().casefold(), molecule.strip())
+        blob = bucket.get_blob(payload_gcs_path(folder))
         if blob is None:
-            print(f"No cached serious-safety payload found for {molecule!r}")
+            missing.append(f"{molecule!r} (tried gs://{GCS_BUCKET}/{payload_gcs_path(folder)})")
             continue
         payload = json.loads(blob.download_as_bytes())
-        payload.setdefault("molecule_name", molecule)
+        payload.setdefault("molecule_name", folder)
         payload.setdefault("cache_gcs_uri", f"gs://{GCS_BUCKET}/{blob.name}")
         rows.append(payload_to_row(payload, created_at=blob.updated.isoformat() if blob.updated else None))
+
+    if missing:
+        available = ", ".join(sorted(folders.values())[:30]) or "none found"
+        message = (
+            "No cached serious-safety payload for: " + "; ".join(missing)
+            + f". Molecule folders under gs://{GCS_BUCKET}/{cache_prefix}: {available}. "
+            "The payload is written by Step 15 of run_serious_safety_assessment, so the molecule must have been "
+            "run with the same GCS_BUCKET / GCS_PIPELINE_CACHE_BASE_PATH / GCS_MEDICAL_POTENTIAL_SUBFOLDER settings."
+        )
+        if not rows:
+            raise FileNotFoundError(message)
+        print(message)
     return pd.DataFrame(rows)
 
 

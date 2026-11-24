@@ -166,6 +166,7 @@ async def _gemini_call_with_search_once(prompt: str, model: str, response_mime_t
             prompt,
             model=model,
             response_mime_type=response_mime_type,
+            step_name="step2_trial_sae_extraction",
         )
         return response or ""
     except Exception as error:

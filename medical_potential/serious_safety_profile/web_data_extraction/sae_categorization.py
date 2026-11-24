@@ -337,7 +337,7 @@ async def _classify_sae_event_batch(
 
     try:
         async with semaphore:
-            raw_response = await gemini_call_with_search(prompt=prompt, model=model_name)
+            raw_response = await gemini_call_with_search(prompt=prompt, model=model_name, step_name="step6_sae_classification")
     except Exception as exc:
         error_msg = f"SAE classification failed for batch [{sae_names}] ({type(exc).__name__}): {exc}"
         logger.error("[SAE_CLASSIFY] %s", error_msg)

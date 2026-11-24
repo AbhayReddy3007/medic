@@ -31,6 +31,13 @@ from .web_data_extraction import (
     calculate_trial_weights_and_agg_sae,
 )
 
+from .llm_runtime import (
+    start_grounding_collection,
+    stop_grounding_collection,
+    dedupe_grounding_urls,
+    grounding_urls_by_step,
+    grounding_sources_by_step,
+)
 from .bq_utils import delete_existing_trials, push_serious_safety_trials_to_bq, load_serious_safety_sae_summary
 
 
@@ -66,6 +73,28 @@ async def run_serious_safety_assessment(
     max_trials: int = None,
     generate_pdf_report: bool = True,
     incremental_mode: bool = True
+) -> dict:
+    """Run the serious safety assessment and collect every grounding source used.
+
+    See `_run_serious_safety_assessment` for the pipeline steps. Sources from all
+    search-enabled Gemini calls are added to the payload as `grounding_urls`,
+    `grounding_urls_by_step` and `grounding_sources_by_step`.
+    """
+    grounding_calls, token = start_grounding_collection()
+    try:
+        return await _run_serious_safety_assessment(
+            molecule_name, max_trials, generate_pdf_report, incremental_mode, grounding_calls
+        )
+    finally:
+        stop_grounding_collection(token)
+
+
+async def _run_serious_safety_assessment(
+    molecule_name: str,
+    max_trials: int,
+    generate_pdf_report: bool,
+    incremental_mode: bool,
+    grounding_calls: list,
 ) -> dict:
     """Run the full serious safety assessment pipeline.
 
@@ -328,6 +357,10 @@ async def run_serious_safety_assessment(
     # Step 15: Uploading the output payload to GCS pipeline cache
     output_payload = {
         "molecule_name": molecule_name,
+        # Web sources behind every search-grounded call (Steps 0, 2, 6, 9, 10)
+        "grounding_urls": dedupe_grounding_urls(grounding_calls),
+        "grounding_urls_by_step": grounding_urls_by_step(grounding_calls),
+        "grounding_sources_by_step": grounding_sources_by_step(grounding_calls),
         "approval_market_status": approval_market_status,
         "total_trials": total_trials,
         "sae_aggregation": trials_with_weights_added,

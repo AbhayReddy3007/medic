@@ -364,7 +364,7 @@ async def identify_regulatory_impact(
         trial_summary=trial_summary,
     )
 
-    raw_response = await gemini_call_with_search(prompt=prompt, model=model_name)
+    raw_response = await gemini_call_with_search(prompt=prompt, model=model_name, step_name="step9_regulatory_impact")
 
     parsed = safe_json_parse(raw_response, context="regulatory_impact")
 
@@ -402,7 +402,7 @@ async def determine_approval_market_status(
         molecule_name=molecule_name,
     )
 
-    status_raw = await gemini_call_with_search(prompt=status_prompt, model=model_name)
+    status_raw = await gemini_call_with_search(prompt=status_prompt, model=model_name, step_name="step0_approval_market_status")
     response["raw_status_response"] = status_raw
     status = safe_json_parse(status_raw, context="approval_market_status")
 
@@ -451,7 +451,7 @@ async def identify_post_marketing_safety(
     post_prompt = POST_MARKETING_SAFETY_PROMPT_TEMPLATE.format(
         molecule_name=molecule_name,
     )
-    post_raw = await gemini_call_with_search(prompt=post_prompt, model=model_name)
+    post_raw = await gemini_call_with_search(prompt=post_prompt, model=model_name, step_name="step10_post_marketing_safety")
     response["raw_post_marketing_response"] = post_raw
     post = safe_json_parse(post_raw, context="post_marketing_safety")
 

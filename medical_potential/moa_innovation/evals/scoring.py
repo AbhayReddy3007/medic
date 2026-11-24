@@ -31,7 +31,11 @@ def _judge_faithfulness(row: pd.Series) -> float | None:
 def _merge(result: pd.DataFrame, frame: pd.DataFrame | None) -> pd.DataFrame:
     if frame is None or frame.empty or "source_key" not in frame.columns:
         return result
-    return result.merge(frame, on="source_key", how="left", suffixes=("", "_eval"))
+    # Drop columns already present in `result` (e.g. every component carries its own `drug_name`).
+    # Without this, repeated merges with suffixes=("", "_eval") rename each frame's overlap to the
+    # same "<col>_eval" name independently, producing duplicate-labeled columns in `result`.
+    redundant = [column for column in frame.columns if column != "source_key" and column in result.columns]
+    return result.merge(frame.drop(columns=redundant), on="source_key", how="left")
 
 
 def build_eval_scores(

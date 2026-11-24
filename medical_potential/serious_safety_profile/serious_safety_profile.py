@@ -34,6 +34,7 @@ from .web_data_extraction import (
 from .llm_runtime import (
     start_grounding_collection,
     stop_grounding_collection,
+    save_sources_json,
     dedupe_grounding_urls,
     grounding_urls_by_step,
     grounding_sources_by_step,
@@ -81,11 +82,15 @@ async def run_serious_safety_assessment(
     `grounding_urls_by_step` and `grounding_sources_by_step`.
     """
     grounding_calls, token = start_grounding_collection()
+    output = None
     try:
-        return await _run_serious_safety_assessment(
+        output = await _run_serious_safety_assessment(
             molecule_name, max_trials, generate_pdf_report, incremental_mode, grounding_calls
         )
+        return output
     finally:
+        # Saved even when the run fails, so partial sources are kept.
+        save_sources_json(molecule_name, grounding_calls, output)
         stop_grounding_collection(token)
 
 

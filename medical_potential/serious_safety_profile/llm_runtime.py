@@ -5,6 +5,9 @@ This module provides the core extraction logic used by the market potential agen
 import os
 import json
 import asyncio
+import re
+from datetime import datetime
+from pathlib import Path
 from contextvars import ContextVar
 from dotenv import load_dotenv
 from json_repair import repair_json
@@ -120,6 +123,36 @@ def grounding_sources_by_step(grounding_calls: list[dict]) -> dict[str, list[dic
             if isinstance(record, dict) and record.get("url"):
                 bucket.setdefault(record["url"], record)
     return {step: list(records.values()) for step, records in by_step.items()}
+
+
+SOURCES_DIR = Path(__file__).resolve().parent / "sources"
+
+
+def save_sources_json(molecule_name: str, grounding_calls: list[dict], output: dict | None = None) -> Path | None:
+    """Write every web source used in this run to sources/<molecule>/sources_<timestamp>.json.
+
+    Same layout as moa_innovation (`sources_by_step`, `total_unique_urls`, `run_timestamp`), so the evals
+    can read it. Best-effort: a failure is logged and never affects the assessment.
+    """
+    try:
+        now = datetime.now()
+        folder = re.sub(r"[^\w.-]+", "_", str(molecule_name).strip()).strip("._") or "unknown"
+        directory = SOURCES_DIR / folder
+        directory.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "drug_name": molecule_name,
+            "run_timestamp": now.isoformat(timespec="seconds"),
+            "total_unique_urls": len(dedupe_grounding_urls(grounding_calls)),
+            "sources_by_step": grounding_sources_by_step(grounding_calls),
+            "safety_score": ((output or {}).get("safety_score") or {}).get("score"),
+        }
+        path = directory / f"sources_{now.strftime('%Y%m%d_%H%M%S')}.json"
+        path.write_text(json.dumps(payload, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
+        print(f"[SERIOUS_SAFETY] Saved {payload['total_unique_urls']} sources to {path}")
+        return path
+    except Exception as error:
+        print(f"[SERIOUS_SAFETY] Could not save sources JSON for {molecule_name!r}: {error}")
+        return None
 
 
 # Configuration

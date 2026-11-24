@@ -1,7 +1,7 @@
 """Context precision: how much of the web context the safety run retrieved is actually relevant.
 
-The Serious Safety pipeline stores every grounding source behind its search-enabled calls in the cached
-payload (`grounding_sources_by_step`). Claude judges whether each source is relevant to the molecule's
+The Serious Safety pipeline saves every grounding source behind its search-enabled calls to
+`sources/<molecule>/sources_<timestamp>.json`. Claude judges whether each source is relevant to the molecule's
 serious safety, and the share that is relevant is reported (overall and per pipeline step).
 """
 

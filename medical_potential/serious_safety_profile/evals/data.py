@@ -2,7 +2,7 @@
 
 A run is the `output_payload.json` that `run_serious_safety_assessment` caches in GCS (Step 15). It is
 flattened to one row per molecule with the judged text columns, the score and its reasoning, a compact
-`pipeline_data` summary of the evidence behind the score, and the grounding sources of the run.
+`pipeline_data` summary of the evidence behind the score. Grounding sources are read separately from `sources/<molecule>/*.json`.
 """
 
 from __future__ import annotations
@@ -121,7 +121,6 @@ def payload_to_row(payload: dict, created_at: Any = None) -> dict:
         "key_drivers": json.dumps(_clean(score.get("key_drivers")), default=str),
         "adjustments_applied": json.dumps(_clean(score.get("adjustments_applied")), default=str),
         "pipeline_data": json.dumps(build_pipeline_data(payload), default=str),
-        "grounding_sources_by_step": json.dumps(_clean(payload.get("grounding_sources_by_step")), default=str),
         "grounding_urls": payload.get("grounding_urls") or [],
         "cache_gcs_uri": payload.get("cache_gcs_uri"),
         "report_gcs_uri": payload.get("report_gcs_uri"),

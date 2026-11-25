@@ -30,6 +30,7 @@ from medical_potential.config import (
 )
 from medical_potential.gcp_utils import get_bq_client
 from medical_potential.gemini_utils import gemini_api_call
+from medical_potential.grounding_sources import gemini_search_call_async
 
 from .bq_utils import (
     TRIAL_MAPPING_SCHEMA,
@@ -402,11 +403,10 @@ async def call_gemini_with_search(prompt: str, model: str) -> str:
     Retry and response handling are centralized in ``gemini_api_call`` so
     concurrent batches do not apply a second, overlapping retry policy.
     """
-    return await asyncio.to_thread(
-        gemini_api_call,
+    return await gemini_search_call_async(
+        "trial_to_unmet_need_mapping",
         prompt=prompt,
         model=model,
-        google_search=True,
     )
 
 

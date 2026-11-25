@@ -11,6 +11,7 @@ import time
 
 from medical_potential.config import GEMINI_FLASH_PREVIEW_MODEL
 from medical_potential.gemini_utils import gemini_api_call
+from medical_potential.grounding_sources import gemini_search_call_async
 
 
 
@@ -86,11 +87,10 @@ async def gemini_call_with_search(prompt: str, model: str, response_mime_type: s
                            Note: Using response_mime_type with Google Search tools may cause errors.
     """
 
-    return await asyncio.to_thread(
-        gemini_api_call,
+    return await gemini_search_call_async(
+        "trial_tolerability_extraction",
         prompt=prompt,
         model=model,
-        google_search=True,
         response_mime_type=response_mime_type,
     )
 

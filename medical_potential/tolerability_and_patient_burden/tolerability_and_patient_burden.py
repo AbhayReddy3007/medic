@@ -7,6 +7,7 @@ within the `tolerability_and_patient_burden` package.
 
 from dotenv import load_dotenv
 import logging
+from pathlib import Path
 from medical_potential.config import (
     GEMINI_FLASH_PREVIEW_MODEL,
     TOLERABILITY_AND_PATIENT_BURDEN_DIMENSION_NAME,
@@ -17,6 +18,11 @@ from .tolerability_tools import (extract_incremental_trials,
                                  delete_existing_trials,
                                  compute_tolerability_score)
 from .bq_utils import append_tolerability_to_bq, push_tolerability_trials_to_bq
+from medical_potential.grounding_sources import (
+    save_sources_json,
+    start_grounding_collection,
+    stop_grounding_collection,
+)
 from medical_potential.gcp_utils import (
     append_dimension_score_to_bigquery,
     upload_dimension_payload_cache_to_gcs,
@@ -30,6 +36,7 @@ load_dotenv()
 
 # Configuration
 DIMENSION_NAME = TOLERABILITY_AND_PATIENT_BURDEN_DIMENSION_NAME
+DIMENSION_DIR = Path(__file__).resolve().parent
 
 logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
 logger = logging.getLogger(__name__)
@@ -48,6 +55,20 @@ async def tolerability_and_patient_burden_assessment(molecule_name: str,
     The function intentionally does not return the payload (per request).
     """
 
+    grounding_calls, token = start_grounding_collection()
+    try:
+        return await _tolerability_and_patient_burden_assessment(
+            molecule_name, drug_class, indication, incremental_mode
+        )
+    finally:
+        # Saved even when the run fails or exits early, so partial sources are kept.
+        save_sources_json(DIMENSION_DIR, molecule_name, grounding_calls)
+        stop_grounding_collection(token)
+
+
+async def _tolerability_and_patient_burden_assessment(molecule_name: str, drug_class: str,
+                                                      indication: str | None,
+                                                      incremental_mode: bool) -> None:
     logger.info("[DIMENSION START] Tolerability & Patient Burden dimension start for %s", molecule_name)
 
     # Step 0: Check for incremental clinical trial data

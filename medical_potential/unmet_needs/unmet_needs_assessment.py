@@ -15,9 +15,15 @@ It runs:
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 
 from dotenv import load_dotenv
 from medical_potential.config import GEMINI_FLASH_PREVIEW_MODEL, UNMET_NEEDS_DIMENSION_NAME
+from medical_potential.grounding_sources import (
+    save_sources_json,
+    start_grounding_collection,
+    stop_grounding_collection,
+)
 from medical_potential.gcp_utils import (
     append_dimension_score_to_bigquery,
     upload_dimension_payload_cache_to_gcs,
@@ -39,6 +45,7 @@ logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 DIMENSION_NAME = UNMET_NEEDS_DIMENSION_NAME
+DIMENSION_DIR = Path(__file__).resolve().parent
 
 
 TRIAL_MAPPING_MODEL = GEMINI_FLASH_PREVIEW_MODEL
@@ -47,7 +54,21 @@ REPORT_MODEL = GEMINI_FLASH_PREVIEW_MODEL
 
 
 async def unmet_needs_assesment(molecule_name: str, incremental_mode: bool = True) -> None:
-    """Run unmet-needs assessment workflow and cache the final result."""
+    """Run unmet-needs assessment workflow and cache the final result.
+
+    Every web source used by search-grounded Gemini calls is saved to
+    sources/<molecule>/sources_<timestamp>.json, even if the run fails part-way.
+    """
+    grounding_calls, token = start_grounding_collection()
+    try:
+        return await _unmet_needs_assessment(molecule_name, incremental_mode)
+    finally:
+        if molecule_name and molecule_name.strip():
+            save_sources_json(DIMENSION_DIR, molecule_name.strip(), grounding_calls)
+        stop_grounding_collection(token)
+
+
+async def _unmet_needs_assessment(molecule_name: str, incremental_mode: bool = True) -> None:
     if not molecule_name or not molecule_name.strip():
         raise ValueError("molecule_name must be provided")
 

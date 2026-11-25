@@ -24,6 +24,7 @@ from .gemini_extractor import extract_clinical_trial_data
 
 from medical_potential.config import GEMINI_FLASH_PREVIEW_MODEL
 from medical_potential.gemini_utils import gemini_api_call
+from medical_potential.grounding_sources import gemini_search_call_async
 from medical_potential.config import (
     BQ_DATASET_ID,
     CLINICAL_EFFICACY_TABLE,
@@ -175,11 +176,10 @@ IMPORTANT: You MUST provide a numeric discontinuation_rate. Prefer recent head-t
     try:
         print(f"  🔍 Calling Gemini for dynamic SoC lookup...")
         # Note: Cannot use response_mime_type with Google Search tool
-        result_text = await asyncio.to_thread(
-            gemini_api_call,
+        result_text = await gemini_search_call_async(
+            "soc_discontinuation_lookup",
             prompt=prompt,
             model=GEMINI_FLASH_PREVIEW_MODEL,
-            google_search=True,
         )
         # print(f"  📝 SoC API response received ({len(result_text)} chars)")
 

@@ -65,6 +65,7 @@ from medical_potential.config import (
 )
 from medical_potential.gcp_utils import get_bq_client
 from medical_potential.gemini_utils import gemini_api_call
+from medical_potential.grounding_sources import gemini_search_call
 
 # Use configured flash-preview model from central config for report generation
 MODEL = GEMINI_FLASH_PREVIEW_MODEL
@@ -107,12 +108,12 @@ GUARDRAIL_FAIL_COLOR = colors.HexColor("#CC0000")
 
 def call_gemini(prompt: str, use_search: bool = False) -> str:
     """Call Gemini with optional Google Search grounding."""
-    response = gemini_api_call(
-        prompt=prompt,
-        model=MODEL,
-        temperature=0.3,
-        google_search=use_search,
-    )
+    if use_search:
+        response = gemini_search_call(
+            "report_generation", prompt=prompt, model=MODEL, temperature=0.3
+        )
+    else:
+        response = gemini_api_call(prompt=prompt, model=MODEL, temperature=0.3)
     return response.strip() if response else ""
 
 

@@ -11,9 +11,12 @@ Concurrency notes:
     - All Gemini calls are gated by one global semaphore (see llm_runtime.py).
 """
 
+import json
+import re
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -58,6 +61,46 @@ from .web_data_extraction import (
 load_dotenv()
 
 DIMENSION_NAME = CLINICAL_EVIDENCE_DIMENSION_NAME
+
+SOURCES_DIR = Path(__file__).resolve().parent / "sources"
+
+
+def _save_sources_json(molecule_name: str, rwe: dict) -> Path | None:
+    """Write every grounding source used in this run to sources/<molecule>/sources_<timestamp>.json.
+
+    Same layout as moa_innovation / serious_safety_profile (`sources_by_step`, `total_unique_urls`,
+    `run_timestamp`). Steps are the RWE data sources. Best-effort: a failure is logged and never
+    affects the assessment.
+    """
+    try:
+        now = datetime.now()
+        folder = re.sub(r"[^\w.-]+", "_", str(molecule_name).strip()).strip("._") or "unknown"
+        directory = SOURCES_DIR / folder
+        directory.mkdir(parents=True, exist_ok=True)
+
+        sources_by_step: dict[str, list] = {}
+        unique_urls: set[str] = set()
+        for step, records in (rwe.get("grounding_urls_by_source") or {}).items():
+            bucket: dict[str, dict] = {}
+            for record in records or []:
+                if isinstance(record, dict) and record.get("url"):
+                    bucket.setdefault(record["url"], record)
+            sources_by_step[f"rwe_{step}"] = list(bucket.values())
+            unique_urls.update(bucket)
+
+        payload = {
+            "drug_name": molecule_name,
+            "run_timestamp": now.isoformat(timespec="seconds"),
+            "total_unique_urls": len(unique_urls),
+            "sources_by_step": sources_by_step,
+        }
+        path = directory / f"sources_{now.strftime('%Y%m%d_%H%M%S')}.json"
+        path.write_text(json.dumps(payload, indent=2, ensure_ascii=False, default=str), encoding="utf-8")
+        log.ok(f"Saved {payload['total_unique_urls']} sources to {path}")
+        return path
+    except Exception as e:
+        log.warn(f"Could not save sources JSON for {molecule_name!r}: {e}")
+        return None
 
 
 async def clinical_evidence_scoring(molecule_name: str, max_trials: int = 20,
@@ -157,6 +200,8 @@ async def clinical_evidence_scoring(molecule_name: str, max_trials: int = 20,
     log.step(3, "REAL-WORLD EVIDENCE SYNTHESIS")
     rwe = run_rwe_summarizer(molecule["generic_name"])
     rwe_synthesis = rwe["synthesis"]
+    # Saved right after the grounded step so the sources are kept even if a later step fails.
+    _save_sources_json(molecule_name.strip(), rwe)
     publications = []   # journal fetching disabled; RWE synthesis used instead
 
     # Step 4
